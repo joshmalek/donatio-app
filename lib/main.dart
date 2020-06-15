@@ -24,6 +24,16 @@ class MyApp extends StatelessWidget {
 
 }
 
+class RandomWords extends StatefulWidget{
+  @override
+  RandomWordsState createState() => RandomWordsState();
+}
+
 class RandomWordsState extends State<RandomWords>{
   //add build method
+  @override 
+  Widget build(BuildContext context){
+    final wordPair = WordPair.random();
+    return Text(wordPair.asPascalCase);
+  }
 }
