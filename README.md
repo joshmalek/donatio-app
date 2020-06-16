@@ -5,11 +5,11 @@ Dart is a language designed to run on all major systems.
 
 ## Main features:
 
-Leaderboard
+1. Leaderboard
 
-Medals
+2. Medals
 
-Total donated
+3. Total donated
 
-EXP tracker
+4. EXP tracker
 
