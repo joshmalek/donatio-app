@@ -13,3 +13,5 @@ Dart is a language designed to run on all major systems.
 
 4. EXP tracker
 
+5. Account settings
+
