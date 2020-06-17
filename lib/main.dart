@@ -1,9 +1,10 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 const baseUrl =
-    'http://10.0.2.2:4000/graphql?query={users{firstName,email,_id}}';
+    'http://10.0.2.2:4000/graphql?query={users{firstName,lastName,email,_id,experience}}';
 
 class API {
   static Future getUsers() {
@@ -16,20 +17,23 @@ class User {
   String id;
   String name;
   String email;
+  int xp;
 
-  User(String id, String name, String email) {
+  User(String id, String name, String email, int xp) {
     this.id = id;
     this.name = name;
     this.email = email;
+    this.xp = xp;
   }
 
   User.fromJson(Map json)
       : id = json['_id'],
-        name = json['firstName'],
-        email = json['email'];
+        name = json['firstName'] + " " + json['lastName'],
+        email = json['email'],
+        xp = json['experience'].toInt();
 
   Map toJson() {
-    return {'id': id, 'name': name, 'email': email};
+    return {'id': id, 'name': name, 'email': email, 'xp': xp};
   }
 }
 
@@ -60,8 +64,8 @@ class _MyListScreenState extends State {
   _getUsers() {
     API.getUsers().then((response) {
       setState(() {
-        print(response.body);
-        print(json.decode(response.body)["data"]["users"]);
+        //print(response.body);
+        //print(json.decode(response.body)["data"]["users"]);
         Iterable list = json.decode(response.body)["data"]["users"];
         users = list.map((model) => User.fromJson(model)).toList();
       });
@@ -86,7 +90,10 @@ class _MyListScreenState extends State {
         body: ListView.builder(
           itemCount: users.length,
           itemBuilder: (context, index) {
-            return ListTile(title: Text(users[index].name));
+            return ListTile(
+              title: Text(users[index].name),
+              subtitle: Text("XP: " + users[index].xp.toString()),
+            );
           },
         ));
   }
