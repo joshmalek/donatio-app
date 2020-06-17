@@ -1,81 +1,92 @@
-import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-Future<User> fetchUser() async {
-  final response =
-      await http.get('http://10.0.2.2:4000/graphql?query={NPOofDay{name}}');
+const baseUrl =
+    'http://10.0.2.2:4000/graphql?query={users{firstName,email,_id}}';
 
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    return User.fromJson(json.decode(response.body));
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load user');
+class API {
+  static Future getUsers() {
+    //var url = baseUrl + "{users{id,firstName,lastName,email}}";
+    return http.get(baseUrl);
   }
 }
 
 class User {
-  final String firstName;
+  int id;
+  String name;
+  String email;
 
-  User({this.firstName});
+  User(int id, String name, String email) {
+    this.id = id;
+    this.name = name;
+    this.email = email;
+  }
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      firstName: json['data']['NPOofDay']['name'],
-    );
+  User.fromJson(Map json)
+      : id = json['data']['users']['id'],
+        name = json['data']['users']['firstName'],
+        email = json['data']['users']['email'];
+
+  Map toJson() {
+    return {'id': id, 'name': name, 'email': email};
   }
 }
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatefulWidget {
-  MyApp({Key key}) : super(key: key);
-
+class MyApp extends StatelessWidget {
   @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  Future<User> futureUser;
-
-  @override
-  void initState() {
-    super.initState();
-    futureUser = fetchUser();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  build(context) {
     return MaterialApp(
-      title: 'Fetch Data Example',
+      debugShowCheckedModeBanner: false,
+      title: 'My Http App',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Fetch Data Example'),
-        ),
-        body: Center(
-          child: FutureBuilder<User>(
-            future: futureUser,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Text(snapshot.data.firstName);
-              } else if (snapshot.hasError) {
-                return Text("${snapshot.error}");
-              }
-
-              // By default, show a loading spinner.
-              return CircularProgressIndicator();
-            },
-          ),
-        ),
-      ),
+      home: MyListScreen(),
     );
+  }
+}
+
+class MyListScreen extends StatefulWidget {
+  @override
+  createState() => _MyListScreenState();
+}
+
+class _MyListScreenState extends State {
+  var users = new List<User>();
+
+  _getUsers() {
+    API.getUsers().then((response) {
+      setState(() {
+        Iterable list = json.decode(response.body);
+        print(list);
+        users = list.map((model) => User.fromJson(model)).toList();
+      });
+    });
+  }
+
+  initState() {
+    super.initState();
+    _getUsers();
+  }
+
+  dispose() {
+    super.dispose();
+  }
+
+  @override
+  build(context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("User List"),
+        ),
+        body: ListView.builder(
+          itemCount: users.length,
+          itemBuilder: (context, index) {
+            return ListTile(title: Text(users[index].name));
+          },
+        ));
   }
 }
