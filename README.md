@@ -1,13 +1,17 @@
 # donatio-app
 Mobile App for Donatio built with Flutter. This will be compatible with iOS and Android.
 
-Main features:
+Dart is a language designed to run on all major systems.
 
-Leaderboard
+## Main features:
 
-Medals
+1. Leaderboard
 
-Total donated
+2. Medals
 
-EXP tracker
+3. Total donated
+
+4. EXP tracker
+
+5. Account settings
 
