@@ -13,20 +13,20 @@ class API {
 }
 
 class User {
-  int id;
+  String id;
   String name;
   String email;
 
-  User(int id, String name, String email) {
+  User(String id, String name, String email) {
     this.id = id;
     this.name = name;
     this.email = email;
   }
 
   User.fromJson(Map json)
-      : id = json['data']['users']['id'],
-        name = json['data']['users']['firstName'],
-        email = json['data']['users']['email'];
+      : id = json['_id'],
+        name = json['firstName'],
+        email = json['email'];
 
   Map toJson() {
     return {'id': id, 'name': name, 'email': email};
@@ -60,8 +60,9 @@ class _MyListScreenState extends State {
   _getUsers() {
     API.getUsers().then((response) {
       setState(() {
-        Iterable list = json.decode(response.body);
-        print(list);
+        print(response.body);
+        print(json.decode(response.body)["data"]["users"]);
+        Iterable list = json.decode(response.body)["data"]["users"];
         users = list.map((model) => User.fromJson(model)).toList();
       });
     });
