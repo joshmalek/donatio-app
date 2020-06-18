@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
 const baseUrl =
@@ -64,19 +65,22 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'My Http App',
       theme: ThemeData(
-        primarySwatch: Colors.pink,
-      ),
-      home: MyListScreen(),
+          scaffoldBackgroundColor: Colors.black,
+          textTheme: Theme.of(context).textTheme.apply(
+                bodyColor: Colors.white,
+                displayColor: Colors.white,
+              )),
+      home: Leaderboard(),
     );
   }
 }
 
-class MyListScreen extends StatefulWidget {
+class Leaderboard extends StatefulWidget {
   @override
-  createState() => _MyListScreenState();
+  createState() => _LeaderboardState();
 }
 
-class _MyListScreenState extends State {
+class _LeaderboardState extends State {
   var users = new List<User>();
 
   _getUsers() {
@@ -86,6 +90,7 @@ class _MyListScreenState extends State {
         //print(json.decode(response.body)["data"]["users"][0]["medals"]);
         Iterable list = json.decode(response.body)["data"]["users"];
         users = list.map((model) => User.fromJson(model)).toList();
+        users.sort((a, b) => b.xp.compareTo(a.xp));
       });
     });
   }
@@ -102,28 +107,54 @@ class _MyListScreenState extends State {
   @override
   build(context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("User List"),
-        ),
-        body: ListView.builder(
-          padding: const EdgeInsets.all(8),
-          itemCount: users.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-                title: Text(users[index].name),
-                subtitle: Text(users[index].email),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => UserDetails(user: users[index]),
-                    ),
-                  );
-                }
-                //subtitle: Text("XP: " + users[index].xp.toString()),
-                );
-          },
-        ));
+        body: Column(children: <Widget>[
+      SizedBox(height: 30),
+      Row(
+        children: <Widget>[
+          SizedBox(
+            width: 10,
+          ),
+          Icon(Icons.accessible_forward, color: Colors.white),
+          SizedBox(
+            width: 20,
+          ),
+          Text("Leaderboard", style: GoogleFonts.workSans(fontSize: 20))
+        ],
+      ),
+      ListView.builder(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        padding: const EdgeInsets.all(8),
+        itemCount: users.length,
+        itemBuilder: (context, index) {
+          return Card(
+              color: index == 0
+                  ? Colors.blue
+                  : index == 1
+                      ? Colors.amber
+                      : index == 2
+                          ? Colors.blueGrey
+                          : index == 3 ? Colors.brown : Colors.deepPurple,
+              shadowColor: Colors.red,
+              child: ListTile(
+                  leading: Text((index + 1).toString(),
+                      style: GoogleFonts.workSans(fontSize: 20)),
+                  title: Text(users[index].name, style: GoogleFonts.workSans()),
+                  trailing: Text(users[index].xp.toString(),
+                      style: GoogleFonts.workSans(fontSize: 20)),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => UserDetails(user: users[index]),
+                      ),
+                    );
+                  }
+                  //subtitle: Text("XP: " + users[index].xp.toString()),
+                  ));
+        },
+      )
+    ]));
   }
 }
 
@@ -135,21 +166,22 @@ class UserDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
         body: Column(children: [
-          SizedBox(height: 50),
-          Row(children: <Widget>[
-            SizedBox(width: 10),
-            Icon(Icons.arrow_back_ios),
-          ]),
-          Center(
-            child: Text(
-              user.name,
-              style: TextStyle(fontSize: 20),
-              textAlign: TextAlign.center,
-            ),
-          )
-        ]));
+      SizedBox(height: 50),
+      Row(children: <Widget>[
+        SizedBox(width: 10),
+        Icon(Icons.arrow_back_ios, color: Colors.white),
+      ]),
+      Center(
+        child: Text(
+          user.name,
+          style: GoogleFonts.workSans(
+            fontSize: 20,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      )
+    ]));
   }
 }
 
