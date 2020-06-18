@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:ffi';
+import 'package:donatio_app/randomWords.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_svg/flutter_svg.dart';
 
 const baseUrl =
-    'http://10.0.2.2:4000/graphql?query={users{firstName,lastName,email,_id,experience}}';
+    'http://10.0.2.2:4000/graphql?query={users{firstName,lastName,email,_id,experience,medals{name,description,img_url}}}';
 
 class API {
   static Future getUsers() {
@@ -13,11 +15,29 @@ class API {
   }
 }
 
+class Medal {
+  String name;
+  String description;
+  String imgUrl;
+
+  Medal(String name, String description, String imgUrl) {
+    this.name = name;
+    this.description = description;
+    this.imgUrl = imgUrl;
+  }
+
+  Medal.fromJson(Map json)
+      : name = json['name'],
+        description = json['description'],
+        imgUrl = json['img_url'];
+}
+
 class User {
   String id;
   String name;
   String email;
   int xp;
+  List<dynamic> medals;
 
   User(String id, String name, String email, int xp) {
     this.id = id;
@@ -30,7 +50,8 @@ class User {
       : id = json['_id'],
         name = json['firstName'] + " " + json['lastName'],
         email = json['email'],
-        xp = json['experience'].toInt();
+        xp = json['experience'].toInt(),
+        medals = json['medals'].map((model) => Medal.fromJson(model)).toList();
 
   Map toJson() {
     return {'id': id, 'name': name, 'email': email, 'xp': xp};
@@ -46,7 +67,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'My Http App',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.pink,
       ),
       home: MyListScreen(),
     );
@@ -65,7 +86,7 @@ class _MyListScreenState extends State {
     API.getUsers().then((response) {
       setState(() {
         //print(response.body);
-        //print(json.decode(response.body)["data"]["users"]);
+        //print(json.decode(response.body)["data"]["users"][0]["medals"]);
         Iterable list = json.decode(response.body)["data"]["users"];
         users = list.map((model) => User.fromJson(model)).toList();
       });
@@ -88,13 +109,62 @@ class _MyListScreenState extends State {
           title: Text("User List"),
         ),
         body: ListView.builder(
+          padding: const EdgeInsets.all(8),
           itemCount: users.length,
           itemBuilder: (context, index) {
             return ListTile(
-              title: Text(users[index].name),
-              subtitle: Text("XP: " + users[index].xp.toString()),
-            );
+                title: Text(users[index].name),
+                subtitle: Text(users[index].email),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => UserDetails(user: users[index]),
+                    ),
+                  );
+                }
+                //subtitle: Text("XP: " + users[index].xp.toString()),
+                );
           },
+        ));
+  }
+}
+
+// ListView.builder(
+//   itemCount: users[index].medals.length,
+//   itemBuilder: (context, index2) {
+//     return ListTile(
+//         title: Text(users[index].medals[index2].name),
+//         subtitle:
+//             Text(users[index].medals[index2].description));
+//   })
+class UserDetails extends StatelessWidget {
+  final User user;
+
+  UserDetails({Key key, @required this.user}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(user.name),
+        ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text("ID: " + user.id),
+            Text("Email: " + user.email),
+            Text("Experience: " + user.xp.toString()),
+            ListView.builder(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: user.medals.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                      title: Text(user.medals[index].name),
+                      subtitle: Text(user.medals[index].description));
+                })
+          ],
         ));
   }
 }
