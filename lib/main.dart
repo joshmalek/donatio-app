@@ -1,9 +1,6 @@
 import 'dart:convert';
-import 'dart:ffi';
-import 'package:donatio_app/randomWords.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_svg/flutter_svg.dart';
 
 const baseUrl =
     'http://10.0.2.2:4000/graphql?query={users{firstName,lastName,email,_id,experience,medals{name,description,img_url}}}';
@@ -130,14 +127,6 @@ class _MyListScreenState extends State {
   }
 }
 
-// ListView.builder(
-//   itemCount: users[index].medals.length,
-//   itemBuilder: (context, index2) {
-//     return ListTile(
-//         title: Text(users[index].medals[index2].name),
-//         subtitle:
-//             Text(users[index].medals[index2].description));
-//   })
 class UserDetails extends StatelessWidget {
   final User user;
 
@@ -146,25 +135,30 @@ class UserDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(user.name),
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text("ID: " + user.id),
-            Text("Email: " + user.email),
-            Text("Experience: " + user.xp.toString()),
-            ListView.builder(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: user.medals.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                      title: Text(user.medals[index].name),
-                      subtitle: Text(user.medals[index].description));
-                })
-          ],
-        ));
+        backgroundColor: Colors.white,
+        body: Column(children: [
+          SizedBox(height: 50),
+          Row(children: <Widget>[
+            SizedBox(width: 10),
+            Icon(Icons.arrow_back_ios),
+          ]),
+          Center(
+            child: Text(
+              user.name,
+              style: TextStyle(fontSize: 20),
+              textAlign: TextAlign.center,
+            ),
+          )
+        ]));
   }
 }
+
+// ListView.builder(
+//     scrollDirection: Axis.vertical,
+//     shrinkWrap: true,
+//     itemCount: user.medals.length,
+//     itemBuilder: (context, index) {
+//       return ListTile(
+//           title: Text(user.medals[index].name),
+//           subtitle: Text(user.medals[index].description));
+//     })
