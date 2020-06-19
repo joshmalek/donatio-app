@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import './screens/Dashboard.dart';
 
@@ -72,7 +73,20 @@ class MyApp extends StatelessWidget {
                   bodyColor: Colors.white,
                   displayColor: Colors.white,
                 )),
-        home: DashboardScreen());
+        home: ScreenWrapper(DashboardScreen()));
+  }
+}
+
+class ScreenWrapper extends StatelessWidget {
+  Widget _screen_widget;
+  ScreenWrapper(this._screen_widget);
+
+  @override
+  build(BuildContext context) {
+    return Container(
+        child: _screen_widget,
+        color: Color(0xff1A191A),
+        padding: EdgeInsets.all(20.0));
   }
 }
 

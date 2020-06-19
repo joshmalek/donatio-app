@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
+import '../src/Icomoon.dart';
 
 class Navbar extends StatelessWidget {
   String _screen_name;
@@ -14,7 +15,8 @@ class Navbar extends StatelessWidget {
         alignment: Alignment.centerLeft,
         child: SafeArea(
             child: Row(children: [
-          SvgPicture.asset('menu.svg', semanticsLabel: "Menu Icon"),
+          Icon(Icomoon.menu,
+              size: 17, semanticLabel: "Menu Icon", color: Colors.white),
           Text(_screen_name)
         ])));
   }
