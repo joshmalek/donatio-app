@@ -63,9 +63,9 @@ flutter:
     - family: icomoon
       fonts:
         - asset: assets/fonts/icomoon.ttf
-    - family: work-sans
+    - family: WorkSans
       fonts:
-        -asset: assets/fonts/WorkSans-VariableFont_wght.ttf
+        - asset: assets/fonts/WorkSans-VariableFont_wght.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

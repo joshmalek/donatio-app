@@ -69,10 +69,17 @@ class MyApp extends StatelessWidget {
         title: 'My Http App',
         theme: ThemeData(
             scaffoldBackgroundColor: Color(0xff1A191A),
-            textTheme: Theme.of(context).textTheme.apply(
-                  bodyColor: Colors.white,
-                  displayColor: Colors.white,
-                )),
+            textTheme: TextTheme(
+                headline1: TextStyle(
+                    fontSize: 18.0,
+                    color: Colors.white,
+                    fontFamily: "WorkSans",
+                    fontWeight: FontWeight.normal),
+                bodyText2: TextStyle(
+                    fontSize: 15.0,
+                    color: Colors.white,
+                    fontFamily: "WorkSans",
+                    fontWeight: FontWeight.normal))),
         home: ScreenWrapper(DashboardScreen()));
   }
 }
@@ -86,7 +93,7 @@ class ScreenWrapper extends StatelessWidget {
     return Container(
         child: _screen_widget,
         color: Color(0xff1A191A),
-        padding: EdgeInsets.all(20.0));
+        padding: EdgeInsets.fromLTRB(20, 10, 20, 10));
   }
 }
 

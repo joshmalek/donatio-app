@@ -4,20 +4,21 @@ import 'package:flutter/material.dart';
 import '../src/Icomoon.dart';
 
 class Navbar extends StatelessWidget {
-  String _screen_name;
-  Navbar(this._screen_name);
+  String _screenName;
+  Navbar(this._screenName);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 60.0,
-        color: Colors.red,
+        height: 50.0,
         alignment: Alignment.centerLeft,
         child: SafeArea(
             child: Row(children: [
-          Icon(Icomoon.menu,
-              size: 17, semanticLabel: "Menu Icon", color: Colors.white),
-          Text(_screen_name)
+          Container(
+              child: Icon(Icomoon.menu,
+                  size: 17, semanticLabel: "Menu Icon", color: Colors.white),
+              margin: EdgeInsets.fromLTRB(0, 0, 10, 0)),
+          Text(_screenName, style: Theme.of(context).textTheme.headline1)
         ])));
   }
 }
