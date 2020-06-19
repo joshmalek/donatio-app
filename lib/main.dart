@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import './screens/Dashboard.dart';
 
 const baseUrl =
     'http://10.0.2.2:4000/graphql?query={users{firstName,lastName,email,_id,experience,medals{name,description,img_url}}}';
@@ -71,7 +72,7 @@ class MyApp extends StatelessWidget {
                   bodyColor: Colors.white,
                   displayColor: Colors.white,
                 )),
-        home: Leaderboard());
+        home: DashboardScreen());
   }
 }
 
