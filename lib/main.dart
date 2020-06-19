@@ -81,6 +81,11 @@ class MyApp extends StatelessWidget {
                     fontSize: 15.0,
                     color: Colors.white,
                     fontFamily: "WorkSans",
+                    fontWeight: FontWeight.normal),
+                headline3: TextStyle(
+                    fontSize: 20,
+                    color: ThemePalette.green,
+                    fontFamily: "WorkSans",
                     fontWeight: FontWeight.normal))),
         home: ScreenWrapper(DashboardScreen()));
   }
