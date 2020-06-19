@@ -63,16 +63,15 @@ class MyApp extends StatelessWidget {
   @override
   build(context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'My Http App',
-      theme: ThemeData(
-          scaffoldBackgroundColor: Color(0xff1A191A),
-          textTheme: Theme.of(context).textTheme.apply(
-                bodyColor: Colors.white,
-                displayColor: Colors.white,
-              )),
-      home: Leaderboard(),
-    );
+        debugShowCheckedModeBanner: false,
+        title: 'My Http App',
+        theme: ThemeData(
+            scaffoldBackgroundColor: Color(0xff1A191A),
+            textTheme: Theme.of(context).textTheme.apply(
+                  bodyColor: Colors.white,
+                  displayColor: Colors.white,
+                )),
+        home: Leaderboard());
   }
 }
 
