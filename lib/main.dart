@@ -6,6 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import './screens/Dashboard.dart';
 
+import 'src/ThemePalette.dart';
+
 const baseUrl =
     'http://10.0.2.2:4000/graphql?query={users{firstName,lastName,email,_id,experience,medals{name,description,img_url}}}';
 
@@ -68,7 +70,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'My Http App',
         theme: ThemeData(
-            scaffoldBackgroundColor: Color(0xff1A191A),
+            scaffoldBackgroundColor: ThemePalette.primary,
             textTheme: TextTheme(
                 headline1: TextStyle(
                     fontSize: 18.0,
@@ -92,7 +94,7 @@ class ScreenWrapper extends StatelessWidget {
   build(BuildContext context) {
     return Container(
         child: _screen_widget,
-        color: Color(0xff1A191A),
+        color: ThemePalette.primary,
         padding: EdgeInsets.fromLTRB(20, 10, 20, 10));
   }
 }
