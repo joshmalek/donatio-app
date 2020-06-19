@@ -127,23 +127,37 @@ class _LeaderboardState extends State {
           Text("Leaderboard", style: GoogleFonts.workSans(fontSize: 20))
         ],
       ),
-      DropdownButton<String>(
-        value: dropdownValue,
-        dropdownColor: Colors.blueGrey,
-        icon: Icon(Icons.keyboard_arrow_down),
-        onChanged: (String newValue) {
-          setState(() {
-            dropdownValue = newValue;
-          });
-        },
-        items: <String>['All Time', 'Two', 'Free', 'Four']
-            .map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList(),
+      SizedBox(
+        height: 20,
       ),
+      Container(
+          width: 375,
+          padding: EdgeInsets.symmetric(horizontal: 10.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5.0),
+            border: Border.all(
+                color: Colors.white, style: BorderStyle.solid, width: 2),
+          ),
+          child: Center(
+              child: DropdownButton<String>(
+            isExpanded: true,
+            value: dropdownValue,
+            underline: SizedBox(),
+            dropdownColor: Color(0xff1A191A),
+            icon: Icon(Icons.keyboard_arrow_down),
+            onChanged: (String newValue) {
+              setState(() {
+                dropdownValue = newValue;
+              });
+            },
+            items: <String>['All Time', 'Two', 'Free', 'Four']
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+          ))),
       Container(
           height: 600,
           child: ListView.separated(
