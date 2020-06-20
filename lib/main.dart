@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 const baseUrl =
-    'http://10.0.2.2:4000/graphql?query={users{firstName,lastName,email,_id,experience,medals{name,description,img_url}}}';
+    'http://10.0.2.2:4000/graphql?query={users{firstName,lastName,email,_id,experience,total_donated,medals{name,description,img_url}}}';
 
 class API {
   static Future getUsers() {
@@ -36,13 +37,15 @@ class User {
   String name;
   String email;
   int xp;
+  double donated;
   List<dynamic> medals;
 
-  User(String id, String name, String email, int xp) {
+  User(String id, String name, String email, int xp, double donated) {
     this.id = id;
     this.name = name;
     this.email = email;
     this.xp = xp;
+    this.donated = donated;
   }
 
   User.fromJson(Map json)
@@ -50,6 +53,8 @@ class User {
         name = json['firstName'] + " " + json['lastName'],
         email = json['email'],
         xp = json['experience'].toInt(),
+        donated =
+            num.parse(json['total_donated'].toStringAsFixed(2)).toDouble(),
         medals = json['medals'].map((model) => Medal.fromJson(model)).toList();
 
   Map toJson() {
@@ -91,6 +96,7 @@ class _LeaderboardState extends State {
         Iterable list = json.decode(response.body)["data"]["users"];
         users = list.map((model) => User.fromJson(model)).toList();
         users.sort((a, b) => b.xp.compareTo(a.xp));
+        print(users[0].donated);
       });
     });
   }
@@ -227,33 +233,57 @@ class UserDetails extends StatelessWidget {
         SizedBox(
           width: 20,
         ),
-        Text(user.name, style: GoogleFonts.workSans(fontSize: 20)),
-        SizedBox(
-          width: 20,
-        ),
-        Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(5)),
-            ),
-            child: Center(
-              child: Text("Lv. " + (user.xp ~/ 10).toString(),
-                  style: GoogleFonts.workSans(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                      color: Colors.black)),
-            ))
+        Text("User Details", style: GoogleFonts.workSans(fontSize: 20)),
       ]),
       SizedBox(height: 20),
       Container(
-        decoration: BoxDecoration(
-            color: Color(0xFF857AA2),
-            borderRadius: BorderRadius.all(Radius.circular(10))),
-        height: 300,
-        width: MediaQuery.of(context).size.width - 50,
-      ),
+          padding: EdgeInsets.all(20.0),
+          decoration: BoxDecoration(
+              color: Color(0xFF857AA2),
+              borderRadius: BorderRadius.all(Radius.circular(10))),
+          height: 300,
+          width: MediaQuery.of(context).size.width - 50,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Text(user.name, style: GoogleFonts.workSans(fontSize: 25)),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12.0, vertical: 4.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                      ),
+                      child: Center(
+                        child: Text("Lv. " + (user.xp ~/ 10).toString(),
+                            style: GoogleFonts.workSans(
+                                fontSize: 16, color: Colors.black)),
+                      ))
+                ],
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text("Lifetime Donations",
+                  style:
+                      GoogleFonts.workSans(fontSize: 18, color: Colors.white)),
+              SizedBox(height: 10),
+              Text(NumberFormat.simpleCurrency().format(user.donated),
+                  style: GoogleFonts.workSans(
+                      fontSize: 35, color: Color(0xFF7BEE96))),
+              Divider(
+                color: Colors.white,
+              ),
+              Text("Medals",
+                  style:
+                      GoogleFonts.workSans(fontSize: 18, color: Colors.white)),
+            ],
+          )),
     ]));
   }
 }
