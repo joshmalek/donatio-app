@@ -174,7 +174,7 @@ class _LeaderboardState extends State {
                           ? Colors.amber
                           : index == 2
                               ? Colors.blueGrey
-                              : index == 3 ? Colors.brown : Colors.deepPurple,
+                              : index == 3 ? Colors.brown : Color(0xFF857AA2),
                   shadowColor: Colors.red,
                   child: ListTile(
                       dense: true,
@@ -215,20 +215,20 @@ class UserDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Column(children: [
-      SizedBox(height: 50),
+      SizedBox(height: 30),
       Row(children: <Widget>[
         SizedBox(width: 10),
-        Icon(Icons.arrow_back_ios, color: Colors.white),
-      ]),
-      Center(
-        child: Text(
-          user.name,
-          style: GoogleFonts.workSans(
-            fontSize: 20,
-          ),
-          textAlign: TextAlign.center,
+        IconButton(
+          icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
-      )
+        SizedBox(
+          width: 20,
+        ),
+        Text(user.name, style: GoogleFonts.workSans(fontSize: 20))
+      ]),
     ]));
   }
 }
