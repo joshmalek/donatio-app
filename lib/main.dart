@@ -158,7 +158,7 @@ class _LeaderboardState extends State {
             }).toList(),
           ))),
       Container(
-          height: 600,
+          height: MediaQuery.of(context).size.height - 205,
           child: ListView.separated(
             separatorBuilder: (BuildContext context, int index) =>
                 const Divider(height: 14),
@@ -227,8 +227,33 @@ class UserDetails extends StatelessWidget {
         SizedBox(
           width: 20,
         ),
-        Text(user.name, style: GoogleFonts.workSans(fontSize: 20))
+        Text(user.name, style: GoogleFonts.workSans(fontSize: 20)),
+        SizedBox(
+          width: 20,
+        ),
+        Container(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+            ),
+            child: Center(
+              child: Text("Lv. " + (user.xp ~/ 10).toString(),
+                  style: GoogleFonts.workSans(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                      color: Colors.black)),
+            ))
       ]),
+      SizedBox(height: 20),
+      Container(
+        decoration: BoxDecoration(
+            color: Color(0xFF857AA2),
+            borderRadius: BorderRadius.all(Radius.circular(10))),
+        height: 300,
+        width: MediaQuery.of(context).size.width - 50,
+      ),
     ]));
   }
 }
