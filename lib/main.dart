@@ -2,8 +2,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import './screens/Dashboard.dart';
+import 'src/ThemePalette.dart';
 
 const baseUrl =
     'http://3.21.56.172:4000/graphql?query={users{firstName,lastName,email,_id,experience,total_donated,medals{name,description,img_url}}}';
@@ -71,12 +74,37 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'My Http App',
         theme: ThemeData(
-            scaffoldBackgroundColor: Color(0xff1A191A),
-            textTheme: Theme.of(context).textTheme.apply(
-                  bodyColor: Colors.white,
-                  displayColor: Colors.white,
-                )),
-        home: Leaderboard());
+            scaffoldBackgroundColor: ThemePalette.primary,
+            textTheme: TextTheme(
+                headline1: TextStyle(
+                    fontSize: 18.0,
+                    color: Colors.white,
+                    fontFamily: "WorkSans",
+                    fontWeight: FontWeight.normal),
+                bodyText2: TextStyle(
+                    fontSize: 15.0,
+                    color: Colors.white,
+                    fontFamily: "WorkSans",
+                    fontWeight: FontWeight.normal),
+                headline3: TextStyle(
+                    fontSize: 20,
+                    color: ThemePalette.green,
+                    fontFamily: "WorkSans",
+                    fontWeight: FontWeight.normal))),
+        home: ScreenWrapper(DashboardScreen()));
+  }
+}
+
+class ScreenWrapper extends StatelessWidget {
+  Widget _screen_widget;
+  ScreenWrapper(this._screen_widget);
+
+  @override
+  build(BuildContext context) {
+    return Container(
+        child: _screen_widget,
+        color: ThemePalette.primary,
+        padding: EdgeInsets.fromLTRB(20, 10, 20, 10));
   }
 }
 
