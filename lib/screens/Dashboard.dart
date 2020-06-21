@@ -4,12 +4,16 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../src/ThemePalette.dart';
 import '../src/Icomoon.dart';
+import '../components/ParallelButton.dart';
 
 class DashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        bottomNavigationBar: BottomNavbar(0), body: Text("Updated Dashboard"));
+        bottomNavigationBar: BottomNavbar(0),
+        body: SafeArea(
+          child: ParallelButton("Sample Button", 230.0),
+        ));
   }
 }
 
@@ -23,14 +27,14 @@ class BottomNavbar extends StatelessWidget {
         height: 40.0,
         margin: EdgeInsets.fromLTRB(0, 0, 0, 25),
         child: Container(
-          margin: EdgeInsets.fromLTRB(40, 0, 40, 0),
+          margin: EdgeInsets.fromLTRB(30, 0, 30, 0),
           width: 150.0,
           child: Stack(
             children: <Widget>[
               Positioned(
                   child: Container(
                       width: (2 *
-                              ((MediaQuery.of(context).size.width - 80) / 11)) -
+                              ((MediaQuery.of(context).size.width - 60) / 11)) -
                           10,
                       height: 40,
                       color: Colors.orange),

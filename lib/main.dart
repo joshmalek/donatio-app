@@ -84,7 +84,7 @@ class MyApp extends StatelessWidget {
                 bodyText2: TextStyle(
                     fontSize: 15.0,
                     color: Colors.white,
-                    fontFamily: "WorkSans",
+                    fontFamily: "OpenSans",
                     fontWeight: FontWeight.normal),
                 headline3: TextStyle(
                     fontSize: 20,
