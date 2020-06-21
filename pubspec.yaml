@@ -66,6 +66,34 @@ flutter:
     - family: WorkSans
       fonts:
         - asset: assets/fonts/WorkSans-VariableFont_wght.ttf
+    - family: OpenSans
+      fonts:
+        - asset: assets/fonts/OpenSans/OpenSans-Regulat.ttf
+          weight: 400
+        - asset: assets/fonts/OpenSans/OpenSans-Italic.ttf
+          style: italic
+        - asset: assets/fonts/OpenSans/Light.ttf
+          weight: 300
+        - asset: assets/fonts/OpenSans/OpenSans-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/OpenSans/OpenSans-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/OpenSans/OpenSans-ExtraBold.ttf
+          weight: 800
+    - family: Yan
+      fonts:
+        - asset: assets/fonts/Yantramanav/Yantramanav-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/Yantramanav/Yantramanav-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Yantramanav/Yantramanav-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Yantramanav/Yantramanav-Medium.ttf
+          weight: 600
+        - asset: assets/fonts/Yantramanav/Yantramanav-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Yantramanav/Yantramanav-Black.ttf
+          weight: 800
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
