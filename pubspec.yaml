@@ -63,6 +63,9 @@ flutter:
     - family: icomoon
       fonts:
         - asset: assets/fonts/icomoon.ttf
+    - family: icomoon2
+      fonts:
+        - asset: assets/fonts/icomoon-2.ttf
     - family: WorkSans
       fonts:
         - asset: assets/fonts/WorkSans-VariableFont_wght.ttf

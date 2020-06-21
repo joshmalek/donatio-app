@@ -14,4 +14,8 @@ class Icomoon {
       IconData(0xe903, fontFamily: 'icomoon');
   static const IconData calendar = IconData(0xe900, fontFamily: 'icomoon');
   static const IconData expGain = IconData(0xe901, fontFamily: 'icomoon');
+  static const IconData trophy = IconData(0xe900, fontFamily: 'icomoon2');
+  static const IconData hexagon2 = IconData(0xe901, fontFamily: 'icomoon2');
+  static const IconData coin = IconData(0xe902, fontFamily: 'icomoon2');
+  static const IconData dashboard = IconData(0xe903, fontFamily: 'icomoon2');
 }
