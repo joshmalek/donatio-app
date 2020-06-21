@@ -13,12 +13,59 @@ class DashboardScreen extends StatelessWidget {
         bottomNavigationBar: BottomNavbar(0),
         body: SafeArea(
           child: Column(children: [
-            ParallelButton("Sample Button", 230.0),
-            Text("Test Button", style: Theme.of(context).textTheme.headline1),
-            Text("Test Button", style: Theme.of(context).textTheme.headline2),
-            Text("Test Button", style: Theme.of(context).textTheme.bodyText2)
+            Container(
+                child: Text("Dashboard: Header Placeholder"),
+                height: 50,
+                alignment: Alignment.centerLeft,
+                color: Colors.orange),
+            LevelModal(10)
           ]),
         ));
+  }
+}
+
+class LevelModal extends StatelessWidget {
+  int _level;
+  LevelModal(this._level);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.topLeft,
+      margin: EdgeInsets.fromLTRB(50, 0, 50, 0),
+      padding: EdgeInsets.fromLTRB(20, 18, 20, 18),
+      child: Column(children: [
+        Container(
+            alignment: Alignment.centerLeft,
+            child: Text("Level", style: FontPresets.title1)),
+        Container(
+          alignment: Alignment.centerLeft,
+          child: Text(_level.toString(), style: FontPresets.huge),
+        ),
+        Container(
+            color: Colors.grey,
+            height: 2,
+            alignment: Alignment.centerLeft,
+            child: FractionallySizedBox(
+              heightFactor: 1,
+              widthFactor: 0.4,
+              child: Container(color: Colors.black),
+            )),
+        Container(
+          alignment: Alignment.centerLeft,
+          child: Text("20 more experience until you reach level 33!",
+              style: FontPresets.small),
+          margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+        )
+      ]),
+      decoration: BoxDecoration(boxShadow: [
+        new BoxShadow(
+            color: ThemePalette.alphaColor(ThemePalette.shadow, 0.05),
+            offset: new Offset(0.0, 1.0),
+            spreadRadius: 2,
+            blurRadius: 5)
+      ], color: Colors.white, borderRadius: BorderRadius.circular(5)),
+    );
   }
 }
 

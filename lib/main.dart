@@ -74,7 +74,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'My Http App',
         theme: ThemeData(
-            scaffoldBackgroundColor: Colors.white,
+            scaffoldBackgroundColor: Color(0xffC39ABB),
             textTheme: TextTheme(
                 headline1: TextStyle(
                     fontSize: 20.0,
@@ -90,7 +90,12 @@ class MyApp extends StatelessWidget {
                     fontSize: 15.0,
                     color: ThemePalette.black,
                     fontFamily: "Yan",
-                    fontWeight: FontWeight.normal))),
+                    fontWeight: FontWeight.normal),
+                headline3: TextStyle(
+                    fontSize: 60,
+                    fontFamily: "Yan",
+                    color: ThemePalette.black,
+                    fontWeight: FontWeight.w600))),
         home: DashboardScreen());
   }
 }
