@@ -4,12 +4,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import './screens/Dashboard.dart';
-
 import 'src/ThemePalette.dart';
 
 const baseUrl =
-    'http://10.0.2.2:4000/graphql?query={users{firstName,lastName,email,_id,experience,medals{name,description,img_url}}}';
+    'http://3.21.56.172:4000/graphql?query={users{firstName,lastName,email,_id,experience,total_donated,medals{name,description,img_url}}}';
 
 class API {
   static Future getUsers() {
@@ -40,13 +40,15 @@ class User {
   String name;
   String email;
   int xp;
+  double donated;
   List<dynamic> medals;
 
-  User(String id, String name, String email, int xp) {
+  User(String id, String name, String email, int xp, double donated) {
     this.id = id;
     this.name = name;
     this.email = email;
     this.xp = xp;
+    this.donated = donated;
   }
 
   User.fromJson(Map json)
@@ -54,6 +56,8 @@ class User {
         name = json['firstName'] + " " + json['lastName'],
         email = json['email'],
         xp = json['experience'].toInt(),
+        donated =
+            num.parse(json['total_donated'].toStringAsFixed(2)).toDouble(),
         medals = json['medals'].map((model) => Medal.fromJson(model)).toList();
 
   Map toJson() {
@@ -187,7 +191,7 @@ class _LeaderboardState extends State {
             }).toList(),
           ))),
       Container(
-          height: 600,
+          height: MediaQuery.of(context).size.height - 205,
           child: ListView.separated(
             separatorBuilder: (BuildContext context, int index) =>
                 const Divider(height: 14),
@@ -203,7 +207,7 @@ class _LeaderboardState extends State {
                           ? Colors.amber
                           : index == 2
                               ? Colors.blueGrey
-                              : index == 3 ? Colors.brown : Colors.deepPurple,
+                              : index == 3 ? Colors.brown : Color(0xFF857AA2),
                   shadowColor: Colors.red,
                   child: ListTile(
                       dense: true,
@@ -244,30 +248,96 @@ class UserDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Column(children: [
-      SizedBox(height: 50),
+      SizedBox(height: 30),
       Row(children: <Widget>[
         SizedBox(width: 10),
-        Icon(Icons.arrow_back_ios, color: Colors.white),
-      ]),
-      Center(
-        child: Text(
-          user.name,
-          style: GoogleFonts.workSans(
-            fontSize: 20,
-          ),
-          textAlign: TextAlign.center,
+        IconButton(
+          icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
+        SizedBox(
+          width: 20,
+        ),
+        Text("User Details", style: GoogleFonts.workSans(fontSize: 20)),
+      ]),
+      SizedBox(height: 20),
+      Container(
+          padding: EdgeInsets.all(20.0),
+          decoration: BoxDecoration(
+              color: Color(0xFF857AA2),
+              borderRadius: BorderRadius.all(Radius.circular(10))),
+          height: MediaQuery.of(context).size.height - 400,
+          width: MediaQuery.of(context).size.width - 50,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Text(user.name, style: GoogleFonts.workSans(fontSize: 25)),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12.0, vertical: 4.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                      ),
+                      child: Center(
+                        child: Text("Lv. " + (user.xp ~/ 10).toString(),
+                            style: GoogleFonts.workSans(
+                                fontSize: 16, color: Colors.black)),
+                      ))
+                ],
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text("Lifetime Donations",
+                  style:
+                      GoogleFonts.workSans(fontSize: 18, color: Colors.white)),
+              SizedBox(height: 10),
+              Text(NumberFormat.simpleCurrency().format(user.donated),
+                  style: GoogleFonts.workSans(
+                      fontSize: 35, color: Color(0xFF7BEE96))),
+              Divider(
+                color: Colors.white,
+              ),
+              Text("Medals",
+                  style:
+                      GoogleFonts.workSans(fontSize: 18, color: Colors.white)),
+              Container(
+                  child: ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: user.medals.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                            leading: SizedBox(
+                              width: 50,
+                              height: 50,
+                              child: SvgPicture.asset(
+                                  'assets/first_donation.svg'), // no matter how big it is, it won't overflow
+                            ),
+                            title: Text(user.medals[index].name),
+                            subtitle: Text(user.medals[index].description));
+                      })),
+            ],
+          )),
+      SizedBox(
+        height: 30,
+      ),
+      Container(
+        width: MediaQuery.of(context).size.width - 50,
+        height: MediaQuery.of(context).size.width - 200,
+        padding: EdgeInsets.all(20.0),
+        decoration: BoxDecoration(
+            color: Color(0xFF857AA2),
+            borderRadius: BorderRadius.all(Radius.circular(10))),
       )
     ]));
   }
 }
-
-// ListView.builder(
-//     scrollDirection: Axis.vertical,
-//     shrinkWrap: true,
-//     itemCount: user.medals.length,
-//     itemBuilder: (context, index) {
-//       return ListTile(
-//           title: Text(user.medals[index].name),
-//           subtitle: Text(user.medals[index].description));
-//     })
