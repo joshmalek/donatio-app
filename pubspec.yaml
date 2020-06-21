@@ -71,11 +71,11 @@ flutter:
         - asset: assets/fonts/WorkSans-VariableFont_wght.ttf
     - family: OpenSans
       fonts:
-        - asset: assets/fonts/OpenSans/OpenSans-Regulat.ttf
+        - asset: assets/fonts/OpenSans/OpenSans-Regular.ttf
           weight: 400
         - asset: assets/fonts/OpenSans/OpenSans-Italic.ttf
           style: italic
-        - asset: assets/fonts/OpenSans/Light.ttf
+        - asset: assets/fonts/OpenSans/OpenSans-Light.ttf
           weight: 300
         - asset: assets/fonts/OpenSans/OpenSans-SemiBold.ttf
           weight: 600

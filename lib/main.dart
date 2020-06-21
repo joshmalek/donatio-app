@@ -91,20 +91,7 @@ class MyApp extends StatelessWidget {
                     color: ThemePalette.green,
                     fontFamily: "WorkSans",
                     fontWeight: FontWeight.normal))),
-        home: ScreenWrapper(DashboardScreen()));
-  }
-}
-
-class ScreenWrapper extends StatelessWidget {
-  Widget _screen_widget;
-  ScreenWrapper(this._screen_widget);
-
-  @override
-  build(BuildContext context) {
-    return Container(
-        child: _screen_widget,
-        color: ThemePalette.primary,
-        padding: EdgeInsets.fromLTRB(20, 10, 20, 10));
+        home: DashboardScreen());
   }
 }
 
