@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 const baseUrl =
-    'http://10.0.2.2:4000/graphql?query={users{firstName,lastName,email,_id,experience,total_donated,medals{name,description,img_url}}}';
+    'http://3.21.56.172:4000/graphql?query={users{firstName,lastName,email,_id,experience,total_donated,medals{name,description,img_url}}}';
 
 class API {
   static Future getUsers() {
@@ -96,7 +96,6 @@ class _LeaderboardState extends State {
         Iterable list = json.decode(response.body)["data"]["users"];
         users = list.map((model) => User.fromJson(model)).toList();
         users.sort((a, b) => b.xp.compareTo(a.xp));
-        print(users[0].donated);
       });
     });
   }
@@ -241,7 +240,7 @@ class UserDetails extends StatelessWidget {
           decoration: BoxDecoration(
               color: Color(0xFF857AA2),
               borderRadius: BorderRadius.all(Radius.circular(10))),
-          height: 300,
+          height: MediaQuery.of(context).size.height - 400,
           width: MediaQuery.of(context).size.width - 50,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -282,18 +281,35 @@ class UserDetails extends StatelessWidget {
               Text("Medals",
                   style:
                       GoogleFonts.workSans(fontSize: 18, color: Colors.white)),
+              Container(
+                  child: ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: user.medals.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                            leading: SizedBox(
+                              width: 50,
+                              height: 50,
+                              child: SvgPicture.asset(
+                                  'assets/first_donation.svg'), // no matter how big it is, it won't overflow
+                            ),
+                            title: Text(user.medals[index].name),
+                            subtitle: Text(user.medals[index].description));
+                      })),
             ],
           )),
+      SizedBox(
+        height: 30,
+      ),
+      Container(
+        width: MediaQuery.of(context).size.width - 50,
+        height: MediaQuery.of(context).size.width - 200,
+        padding: EdgeInsets.all(20.0),
+        decoration: BoxDecoration(
+            color: Color(0xFF857AA2),
+            borderRadius: BorderRadius.all(Radius.circular(10))),
+      )
     ]));
   }
 }
-
-// ListView.builder(
-//     scrollDirection: Axis.vertical,
-//     shrinkWrap: true,
-//     itemCount: user.medals.length,
-//     itemBuilder: (context, index) {
-//       return ListTile(
-//           title: Text(user.medals[index].name),
-//           subtitle: Text(user.medals[index].description));
-//     })
