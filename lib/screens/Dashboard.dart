@@ -12,7 +12,12 @@ class DashboardScreen extends StatelessWidget {
     return Scaffold(
         bottomNavigationBar: BottomNavbar(0),
         body: SafeArea(
-          child: ParallelButton("Sample Button", 230.0),
+          child: Column(children: [
+            ParallelButton("Sample Button", 230.0),
+            Text("Test Button", style: Theme.of(context).textTheme.headline1),
+            Text("Test Button", style: Theme.of(context).textTheme.headline2),
+            Text("Test Button", style: Theme.of(context).textTheme.bodyText2)
+          ]),
         ));
   }
 }
@@ -74,8 +79,13 @@ class BottomNavbar extends StatelessWidget {
               )
             ],
           ),
-          decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(5)),
+          decoration: BoxDecoration(boxShadow: [
+            new BoxShadow(
+                color: ThemePalette.shadow,
+                offset: new Offset(0.0, 1.0),
+                spreadRadius: 2,
+                blurRadius: 8)
+          ], color: Colors.white, borderRadius: BorderRadius.circular(5)),
         ));
   }
 }

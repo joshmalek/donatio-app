@@ -74,22 +74,22 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'My Http App',
         theme: ThemeData(
-            scaffoldBackgroundColor: ThemePalette.primary,
+            scaffoldBackgroundColor: Colors.white,
             textTheme: TextTheme(
                 headline1: TextStyle(
-                    fontSize: 18.0,
-                    color: Colors.white,
-                    fontFamily: "WorkSans",
+                    fontSize: 20.0,
+                    color: ThemePalette.black,
+                    fontFamily: "Yan",
                     fontWeight: FontWeight.normal),
                 bodyText2: TextStyle(
-                    fontSize: 15.0,
-                    color: Colors.white,
+                    fontSize: 12.0,
+                    color: ThemePalette.black,
                     fontFamily: "OpenSans",
                     fontWeight: FontWeight.normal),
-                headline3: TextStyle(
-                    fontSize: 20,
-                    color: ThemePalette.green,
-                    fontFamily: "WorkSans",
+                headline2: TextStyle(
+                    fontSize: 15.0,
+                    color: ThemePalette.black,
+                    fontFamily: "Yan",
                     fontWeight: FontWeight.normal))),
         home: DashboardScreen());
   }
