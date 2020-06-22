@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
 import '../src/ThemePalette.dart';
 import '../src/Icomoon.dart';
@@ -207,9 +208,39 @@ class LevelModal extends StatelessWidget {
   }
 }
 
-class BottomNavbar extends StatelessWidget {
+class BottomNavbar extends StatefulWidget {
   int _pageIndex = 0;
   BottomNavbar(this._pageIndex);
+
+  @override
+  _BottomNavbarState createState() => _BottomNavbarState();
+}
+
+class _BottomNavbarState extends State<BottomNavbar> {
+  double _left = 5;
+
+  double _updateState(int iconIndex) {
+    double targetDisp = 0;
+    switch (iconIndex) {
+      case 0:
+        targetDisp = 0;
+        break;
+      case 1:
+        targetDisp = 2 * (MediaQuery.of(context).size.width - 60) / 11;
+        break;
+      case 2:
+        targetDisp = 7 * (MediaQuery.of(context).size.width - 60) / 11;
+        break;
+      case 3:
+        targetDisp = 9 * (MediaQuery.of(context).size.width - 60) / 11;
+        break;
+    }
+    targetDisp += 5;
+
+    setState(() {
+      _left = targetDisp;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -221,26 +252,36 @@ class BottomNavbar extends StatelessWidget {
           width: 150.0,
           child: Stack(
             children: <Widget>[
-              Positioned(
+              AnimatedPositioned(
+                  duration: Duration(milliseconds: 350),
+                  curve: Curves.easeInOut,
                   child: Container(
                       width: (2 *
                               ((MediaQuery.of(context).size.width - 60) / 11)) -
                           10,
                       height: 40,
                       color: Colors.orange),
-                  left: 5),
+                  left: _left),
               Row(
                 children: <Widget>[
                   Flexible(
                       flex: 2,
-                      child: Container(
-                          alignment: Alignment.center,
-                          child: Icon(Icomoon.dashboard, size: 17))),
+                      child: GestureDetector(
+                          onTap: () {
+                            _updateState(0);
+                          },
+                          child: Container(
+                              alignment: Alignment.center,
+                              child: Icon(Icomoon.dashboard, size: 17)))),
                   Flexible(
                       flex: 2,
-                      child: Container(
-                          alignment: Alignment.center,
-                          child: Icon(Icomoon.hexagon2, size: 22))),
+                      child: GestureDetector(
+                          onTap: () {
+                            _updateState(1);
+                          },
+                          child: Container(
+                              alignment: Alignment.center,
+                              child: Icon(Icomoon.hexagon2, size: 22)))),
                   Flexible(
                       flex: 3,
                       child: Container(
@@ -252,14 +293,22 @@ class BottomNavbar extends StatelessWidget {
                           alignment: Alignment.center)),
                   Flexible(
                       flex: 2,
-                      child: Container(
-                          alignment: Alignment.center,
-                          child: Icon(Icomoon.trophy, size: 20))),
+                      child: GestureDetector(
+                          onTap: () {
+                            _updateState(2);
+                          },
+                          child: Container(
+                              alignment: Alignment.center,
+                              child: Icon(Icomoon.trophy, size: 20)))),
                   Flexible(
                       flex: 2,
-                      child: Container(
-                          alignment: Alignment.center,
-                          child: Icon(Icomoon.coin, size: 18)))
+                      child: GestureDetector(
+                          onTap: () {
+                            _updateState(3);
+                          },
+                          child: Container(
+                              alignment: Alignment.center,
+                              child: Icon(Icomoon.coin, size: 18))))
                 ],
               )
             ],
@@ -272,5 +321,20 @@ class BottomNavbar extends StatelessWidget {
                 blurRadius: 8)
           ], color: Colors.white, borderRadius: BorderRadius.circular(5)),
         ));
+  }
+}
+
+class NavbarBackgroundSlider extends AnimatedWidget {
+  NavbarBackgroundSlider({AnimationController controller})
+      : super(listenable: Tween<double>(begin: 0, end: 1).animate(controller));
+
+  Widget build(BuildContext context) {
+    Animation<double> animation = listenable;
+    return Positioned(
+        child: Container(
+            width: (2 * ((MediaQuery.of(context).size.width - 60) / 11)) - 10,
+            height: 40,
+            color: Colors.orange),
+        left: (animation.value * 100) + 5);
   }
 }

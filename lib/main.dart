@@ -73,7 +73,7 @@ class MyApp extends StatelessWidget {
   build(context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'My Http App',
+        title: 'DonatIO',
         theme: ThemeData(
             scaffoldBackgroundColor: Color(0xffC39ABB),
             textTheme: TextTheme(
