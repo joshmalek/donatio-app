@@ -43,7 +43,7 @@ class DonatedList extends StatelessWidget {
             singleDonation()
           ],
         ),
-        margin: EdgeInsets.fromLTRB(0, 10, 0, 0));
+        margin: EdgeInsets.fromLTRB(0, 20, 0, 0));
   }
 }
 
