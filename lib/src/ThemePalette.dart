@@ -29,6 +29,12 @@ class FontPresets {
       fontWeight: FontWeight.w400,
       color: Color(0xff000000));
 
+  static const TextStyle title2 = TextStyle(
+      fontSize: 20,
+      fontFamily: "Yan",
+      fontWeight: FontWeight.w400,
+      color: Color(0xff000000));
+
   static const TextStyle huge = TextStyle(
       fontSize: 70,
       fontFamily: "Yan",

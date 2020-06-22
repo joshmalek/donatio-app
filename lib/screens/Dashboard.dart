@@ -12,17 +12,38 @@ class DashboardScreen extends StatelessWidget {
     return Scaffold(
         bottomNavigationBar: BottomNavbar(0),
         body: SafeArea(
-          child: Column(children: [
-            Container(
-                child: Text("Dashboard: Header Placeholder"),
-                height: 50,
-                alignment: Alignment.centerLeft,
-                color: Colors.orange),
-            LevelModal(10),
-            ViewLeaderboard(),
-            DonatedModal(1205.23, "\$")
-          ]),
-        ));
+            child: Column(children: [
+          Container(
+              child: Text("Dashboard: Header Placeholder"),
+              height: 50,
+              alignment: Alignment.centerLeft,
+              color: Colors.orange),
+          LevelModal(10),
+          ViewLeaderboard(),
+          DonatedModal(1205.23, "\$"),
+          DonatedList()
+        ])));
+  }
+}
+
+class DonatedList extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        height: 120,
+        child: ListView(
+          scrollDirection: Axis.horizontal,
+          children: <Widget>[
+            singleDonation(),
+            singleDonation(),
+            singleDonation(),
+            singleDonation(),
+            singleDonation(),
+            singleDonation(),
+            singleDonation()
+          ],
+        ),
+        margin: EdgeInsets.fromLTRB(0, 10, 0, 0));
   }
 }
 
@@ -49,16 +70,7 @@ class DonatedModal extends StatelessWidget {
                 child: Text("Donated this week", style: FontPresets.title1),
                 alignment: Alignment.centerLeft,
                 margin: EdgeInsets.fromLTRB(0, 5, 0, 15)),
-          ]..addAll(_amount == 0
-              ? emptyDonationView
-              : donationSlider([
-                  {'org': "BLM", 'amount': 102.4, 'day': 'Monday'},
-                  {'org': "BLM", 'amount': 102.4, 'day': 'Monday'},
-                  {'org': "BLM", 'amount': 102.4, 'day': 'Monday'},
-                  {'org': "BLM", 'amount': 102.4, 'day': 'Monday'},
-                  {'org': "BLM", 'amount': 102.4, 'day': 'Monday'},
-                  {'org': "BLM", 'amount': 102.4, 'day': 'Monday'}
-                ])),
+          ]..addAll(_amount == 0 ? emptyDonationView : []),
         ),
         decoration: BoxDecoration(boxShadow: [
           new BoxShadow(
@@ -70,17 +82,26 @@ class DonatedModal extends StatelessWidget {
   }
 }
 
-List<Widget> donationSlider(List<Map<String, dynamic>> donations) {
-  return <Widget>[
-    Container(
-      child: Stack(children: [
-        Positioned(
-            left: -50,
-            child: Container(width: 100, height: 120, color: Colors.pink))
-      ]),
-      height: 120,
-    )
-  ];
+Widget singleDonation() {
+  return Container(
+    padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+    margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+    width: 100,
+    child: Column(
+      children: <Widget>[
+        Container(
+          child: Text("Monday", style: FontPresets.buttonText),
+          margin: EdgeInsets.fromLTRB(0, 0, 0, 15),
+        ),
+        Text("\$1302.12",
+            style: FontPresets.colorTransform(
+                FontPresets.title2, ThemePalette.green2)),
+        Text("to Black Lives Matter", style: FontPresets.buttonText)
+      ],
+    ),
+    decoration: BoxDecoration(
+        color: ThemePalette.black, borderRadius: BorderRadius.circular(3)),
+  );
 }
 
 // ListView(
