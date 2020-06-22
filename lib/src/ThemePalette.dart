@@ -7,6 +7,7 @@ class ThemePalette {
   static const Color inverse = Color(0xffffffff);
   static const Color green = Color(0xff7BEE96);
   static const Color green2 = Color(0xff52ECBD);
+  static const Color green3 = Color(0xffA8F39F);
   static const Color black = Color(0xff202020);
   static const Color shadow = Color.fromRGBO(0, 0, 0, 0.2);
   static const Color grey = Color(0xffB5B5B5);
