@@ -12,3 +12,12 @@ class LeaderboardScreen extends StatelessWidget {
         bottomNavigationBar: BottomNavbar());
   }
 }
+
+class LeaderboardBody extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Text("Leaderboard Screen Placeholder"),
+    );
+  }
+}

@@ -28,6 +28,31 @@ class DashboardScreen extends StatelessWidget {
   }
 }
 
+class DashboardBody extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+        child: Column(children: [
+      Container(
+          child: Text("Dashboard: Header Placeholder"),
+          height: 50,
+          alignment: Alignment.centerLeft,
+          color: Colors.orange),
+      LevelModal(10),
+      ViewLeaderboard(),
+      DonatedModal(1205.23, "\$"),
+      DonatedList()
+    ]));
+  }
+}
+
+class AnotherBody extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(child: Text("Hope this works!"));
+  }
+}
+
 class DonatedList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

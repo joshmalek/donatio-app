@@ -1,3 +1,4 @@
+import 'package:donatio_app/components/Navbar.dart';
 import 'package:donatio_app/screens/Dashboard.dart';
 import 'package:donatio_app/screens/DonateScreen.dart';
 import 'package:donatio_app/screens/Leaderboard.dart';
@@ -11,6 +12,8 @@ class RouteController {
     final args = settings.arguments;
 
     switch (settings.name) {
+      case '/bottomTabView':
+        return SlideRightRoute(page: BottomNavbar());
       case '/dashboard':
         return SlideRightRoute(page: DashboardScreen());
       case '/unlockedMedals':

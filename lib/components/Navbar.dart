@@ -1,3 +1,7 @@
+import 'package:donatio_app/screens/Dashboard.dart';
+import 'package:donatio_app/screens/DonateScreen.dart';
+import 'package:donatio_app/screens/Leaderboard.dart';
+import 'package:donatio_app/screens/UnlockedMedals.dart';
 import 'package:donatio_app/src/Icomoon.dart';
 import 'package:donatio_app/src/ThemePalette.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,10 +13,34 @@ class BottomNavbar extends StatefulWidget {
   _BottomNavbarState createState() => _BottomNavbarState();
 }
 
+// class BottomNavigatableView extends StatelessWidget {
+
+//   int _currentIndex = 0;
+//   final List<Widget> tabs = [
+//     DashboardBody(),
+//     AnotherBody()
+//   ];
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return
+//   }
+// }
+
 class _BottomNavbarState extends State<BottomNavbar> {
   double _left = 5;
+  int _pageIndex = 0;
+
+  final List<Widget> tabs = [
+    DashboardBody(),
+    UnlockedMedalsBody(),
+    LeaderboardBody(),
+    DonateBody()
+  ];
 
   double _updateState(int iconIndex) {
+    _pageIndex = iconIndex;
+
     double targetDisp = 0;
     switch (iconIndex) {
       case 0:
@@ -37,90 +65,93 @@ class _BottomNavbarState extends State<BottomNavbar> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        height: 40.0,
-        margin: EdgeInsets.fromLTRB(0, 0, 0, 25),
-        child: Container(
-          margin: EdgeInsets.fromLTRB(30, 0, 30, 0),
-          width: 150.0,
-          child: Stack(
-            children: <Widget>[
-              AnimatedPositioned(
-                  duration: Duration(milliseconds: 350),
-                  curve: Curves.easeInOut,
-                  child: Container(
-                      width: (2 *
-                              ((MediaQuery.of(context).size.width - 60) / 11)) -
-                          10,
-                      height: 40,
-                      color: Colors.orange),
-                  left: _left),
-              Row(
+    return Scaffold(
+        bottomNavigationBar: Container(
+            height: 40.0,
+            margin: EdgeInsets.fromLTRB(0, 0, 0, 25),
+            child: Container(
+              margin: EdgeInsets.fromLTRB(30, 0, 30, 0),
+              width: 150.0,
+              child: Stack(
                 children: <Widget>[
-                  Flexible(
-                      flex: 2,
-                      child: GestureDetector(
-                          onTap: () {
-                            _updateState(0);
-                            Navigator.of(context)
-                                .pushReplacementNamed('/dashboard');
-                          },
-                          child: Container(
-                              alignment: Alignment.center,
-                              child: Icon(Icomoon.dashboard, size: 17)))),
-                  Flexible(
-                      flex: 2,
-                      child: GestureDetector(
-                          onTap: () {
-                            _updateState(1);
-                            Navigator.of(context)
-                                .pushReplacementNamed('/unlockedMedals');
-                          },
-                          child: Container(
-                              alignment: Alignment.center,
-                              child: Icon(Icomoon.hexagon2, size: 22)))),
-                  Flexible(
-                      flex: 3,
+                  AnimatedPositioned(
+                      duration: Duration(milliseconds: 350),
+                      curve: Curves.easeInOut,
                       child: Container(
-                          child: SvgPicture.asset(
-                            "assets/logo_4.svg",
-                            semanticsLabel: "DonatIO Logo",
-                          ),
-                          height: 60,
-                          alignment: Alignment.center)),
-                  Flexible(
-                      flex: 2,
-                      child: GestureDetector(
-                          onTap: () {
-                            _updateState(2);
-                            Navigator.of(context)
-                                .pushReplacementNamed('/leaderboard');
-                          },
+                          width: (2 *
+                                  ((MediaQuery.of(context).size.width - 60) /
+                                      11)) -
+                              10,
+                          height: 40,
+                          color: Colors.orange),
+                      left: _left),
+                  Row(
+                    children: <Widget>[
+                      Flexible(
+                          flex: 2,
+                          child: GestureDetector(
+                              onTap: () {
+                                _updateState(0);
+                                // Navigator.of(context)
+                                //     .pushReplacementNamed('/dashboard');
+                              },
+                              child: Container(
+                                  alignment: Alignment.center,
+                                  child: Icon(Icomoon.dashboard, size: 17)))),
+                      Flexible(
+                          flex: 2,
+                          child: GestureDetector(
+                              onTap: () {
+                                _updateState(1);
+                                // Navigator.of(context)
+                                //     .pushReplacementNamed('/unlockedMedals');
+                              },
+                              child: Container(
+                                  alignment: Alignment.center,
+                                  child: Icon(Icomoon.hexagon2, size: 22)))),
+                      Flexible(
+                          flex: 3,
                           child: Container(
-                              alignment: Alignment.center,
-                              child: Icon(Icomoon.trophy, size: 20)))),
-                  Flexible(
-                      flex: 2,
-                      child: GestureDetector(
-                          onTap: () {
-                            _updateState(3);
-                            Navigator.of(context)
-                                .pushReplacementNamed('/donate');
-                          },
-                          child: Container(
-                              alignment: Alignment.center,
-                              child: Icon(Icomoon.coin, size: 18))))
+                              child: SvgPicture.asset(
+                                "assets/logo_4.svg",
+                                semanticsLabel: "DonatIO Logo",
+                              ),
+                              height: 60,
+                              alignment: Alignment.center)),
+                      Flexible(
+                          flex: 2,
+                          child: GestureDetector(
+                              onTap: () {
+                                _updateState(2);
+                                // Navigator.of(context)
+                                //     .pushReplacementNamed('/leaderboard');
+                              },
+                              child: Container(
+                                  alignment: Alignment.center,
+                                  child: Icon(Icomoon.trophy, size: 20)))),
+                      Flexible(
+                          flex: 2,
+                          child: GestureDetector(
+                              onTap: () {
+                                _updateState(3);
+                                // Navigator.of(context)
+                                //     .pushReplacementNamed('/donate');
+                              },
+                              child: Container(
+                                  alignment: Alignment.center,
+                                  child: Icon(Icomoon.coin, size: 18))))
+                    ],
+                  )
                 ],
-              )
-            ],
-          ),
-          decoration: BoxDecoration(boxShadow: [
-            new BoxShadow(
-                color: ThemePalette.shadow,
-                offset: new Offset(0.0, 1.0),
-                spreadRadius: 2,
-                blurRadius: 8)
-          ], color: Colors.white, borderRadius: BorderRadius.circular(5)),
-        ));
+              ),
+              decoration: BoxDecoration(boxShadow: [
+                new BoxShadow(
+                    color: ThemePalette.shadow,
+                    offset: new Offset(0.0, 1.0),
+                    spreadRadius: 2,
+                    blurRadius: 8)
+              ], color: Colors.white, borderRadius: BorderRadius.circular(5)),
+            )),
+        body: tabs[_pageIndex]);
   }
 }

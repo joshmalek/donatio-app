@@ -12,3 +12,12 @@ class DonateScreen extends StatelessWidget {
         bottomNavigationBar: BottomNavbar());
   }
 }
+
+class DonateBody extends StatelessWidget {
+  @override
+  Widget build(BuildContext conext) {
+    return SafeArea(
+      child: Text("Donate Screen Placeholder"),
+    );
+  }
+}

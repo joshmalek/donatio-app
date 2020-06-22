@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import './screens/Dashboard.dart';
 import './screens/LockedMedals.dart';
+import 'components/Navbar.dart';
 import 'src/ThemePalette.dart';
 
 const baseUrl =
@@ -98,7 +99,7 @@ class MyApp extends StatelessWidget {
                   fontFamily: "Yan",
                   color: ThemePalette.black,
                   fontWeight: FontWeight.w600))),
-      initialRoute: '/dashboard',
+      initialRoute: '/bottomTabView',
       onGenerateRoute: RouteController.generateRoute,
     );
   }
