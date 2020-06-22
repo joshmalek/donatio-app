@@ -18,8 +18,125 @@ class DashboardScreen extends StatelessWidget {
                 height: 50,
                 alignment: Alignment.centerLeft,
                 color: Colors.orange),
-            LevelModal(10)
+            LevelModal(10),
+            ViewLeaderboard(),
+            DonatedModal(1205.23, "\$")
           ]),
+        ));
+  }
+}
+
+class DonatedModal extends StatelessWidget {
+  double _amount;
+  String _currencySymbol;
+
+  DonatedModal(this._amount, this._currencySymbol);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        margin: EdgeInsets.fromLTRB(50, 10, 50, 0),
+        padding: EdgeInsets.fromLTRB(20, 18, 20, 18),
+        alignment: Alignment.topLeft,
+        child: Column(
+          children: <Widget>[
+            Container(
+              child: Text("${_currencySymbol}${_amount.toString()}",
+                  style: FontPresets.colorTransform(
+                      FontPresets.medium, ThemePalette.green2)),
+              alignment: Alignment.centerLeft,
+            ),
+            Container(
+                child: Text("Donated this week", style: FontPresets.title1),
+                alignment: Alignment.centerLeft,
+                margin: EdgeInsets.fromLTRB(0, 5, 0, 15)),
+          ]..addAll(_amount == 0
+              ? emptyDonationView
+              : donationSlider([
+                  {'org': "BLM", 'amount': 102.4, 'day': 'Monday'},
+                  {'org': "BLM", 'amount': 102.4, 'day': 'Monday'},
+                  {'org': "BLM", 'amount': 102.4, 'day': 'Monday'},
+                  {'org': "BLM", 'amount': 102.4, 'day': 'Monday'},
+                  {'org': "BLM", 'amount': 102.4, 'day': 'Monday'},
+                  {'org': "BLM", 'amount': 102.4, 'day': 'Monday'}
+                ])),
+        ),
+        decoration: BoxDecoration(boxShadow: [
+          new BoxShadow(
+              color: ThemePalette.alphaColor(ThemePalette.shadow, 0.05),
+              offset: new Offset(0.0, 1.0),
+              spreadRadius: 2,
+              blurRadius: 5)
+        ], color: Colors.white, borderRadius: BorderRadius.circular(5)));
+  }
+}
+
+List<Widget> donationSlider(List<Map<String, dynamic>> donations) {
+  return <Widget>[
+    Container(
+      child: Stack(children: [
+        Positioned(
+            left: -50,
+            child: Container(width: 100, height: 120, color: Colors.pink))
+      ]),
+      height: 120,
+    )
+  ];
+}
+
+// ListView(
+//           children: <Widget>[
+//             Container(
+//                 width: 100,
+//                 color: Colors.red,
+//                 margin: EdgeInsets.fromLTRB(0, 0, 10, 0)),
+//             Container(
+//                 width: 100,
+//                 color: Colors.blue,
+//                 margin: EdgeInsets.fromLTRB(0, 0, 10, 0)),
+//             Container(
+//                 width: 100,
+//                 color: Colors.cyan,
+//                 margin: EdgeInsets.fromLTRB(0, 0, 10, 0)),
+//             Container(
+//                 width: 100,
+//                 color: Colors.brown,
+//                 margin: EdgeInsets.fromLTRB(0, 0, 10, 0))
+//           ],
+//           scrollDirection: Axis.horizontal,
+//         )
+
+List<Widget> emptyDonationView = [
+  Container(
+    child:
+        Text("Want to start donating to charities?", style: FontPresets.small),
+    alignment: Alignment.centerLeft,
+  ),
+  Container(
+    child: ParallelButton("Donate", 150),
+    margin: EdgeInsets.fromLTRB(0, 40, 0, 40),
+  )
+];
+
+class ViewLeaderboard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        alignment: Alignment.centerLeft,
+        height: 100,
+        child: Stack(
+          children: <Widget>[
+            Positioned(
+                child: SvgPicture.asset("assets/winner.svg",
+                    semanticsLabel: 'Winner SVG'),
+                width: 180,
+                height: 100,
+                left: 20,
+                top: -10),
+            Positioned(
+                child: ParallelButton("View Leaderboard", 180),
+                right: 40,
+                top: 30),
+          ],
         ));
   }
 }
@@ -53,7 +170,7 @@ class LevelModal extends StatelessWidget {
             )),
         Container(
           alignment: Alignment.centerLeft,
-          child: Text("20 more experience until you reach level 33!",
+          child: Text('20 more experience until you reach level ${_level + 1}!',
               style: FontPresets.small),
           margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
         )

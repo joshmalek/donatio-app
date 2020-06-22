@@ -11,8 +11,8 @@ class ParallelButton extends StatelessWidget {
     return Container(
         height: 30,
         alignment: Alignment.center,
-        width: _width < 200 ? 200 : _width,
-        child: Text(this._buttonValue, style: TextStyle(fontSize: 13)),
+        width: _width < 100 ? 100 : _width,
+        child: Text(this._buttonValue, style: FontPresets.buttonText),
         decoration: BoxDecoration(
             color: ThemePalette.black, borderRadius: BorderRadius.circular(3)));
   }

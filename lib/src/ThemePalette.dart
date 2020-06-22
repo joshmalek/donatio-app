@@ -6,6 +6,7 @@ class ThemePalette {
   static const Color secondary2 = Color(0xff5E8FA8);
   static const Color inverse = Color(0xffffffff);
   static const Color green = Color(0xff7BEE96);
+  static const Color green2 = Color(0xff52ECBD);
   static const Color black = Color(0xff202020);
   static const Color shadow = Color.fromRGBO(0, 0, 0, 0.2);
   static const Color grey = Color(0xffB5B5B5);
@@ -33,4 +34,25 @@ class FontPresets {
       fontFamily: "Yan",
       fontWeight: FontWeight.w400,
       color: Color(0xff000000));
+
+  static const TextStyle medium = TextStyle(
+      fontSize: 45,
+      fontFamily: "Yan",
+      fontWeight: FontWeight.w400,
+      color: Color(0xff000000));
+
+  static const TextStyle buttonText = TextStyle(
+      fontSize: 12,
+      fontFamily: "OpenSans",
+      fontWeight: FontWeight.normal,
+      color: Color(0xffffffff));
+
+  static TextStyle colorTransform(TextStyle fromStyle, Color newColor) {
+    TextStyle newStyle = TextStyle(
+        color: newColor,
+        fontSize: fromStyle.fontSize,
+        fontFamily: fromStyle.fontFamily,
+        fontWeight: fromStyle.fontWeight);
+    return newStyle;
+  }
 }
