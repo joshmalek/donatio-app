@@ -10,6 +10,7 @@ class ThemePalette {
   static const Color black = Color(0xff202020);
   static const Color shadow = Color.fromRGBO(0, 0, 0, 0.2);
   static const Color grey = Color(0xffB5B5B5);
+  static const Color red = Color(0xffFF7A7A);
 
   static Color alphaColor(Color base, double alphaValue) {
     return Color.fromRGBO(base.red, base.green, base.green, alphaValue);
@@ -53,12 +54,27 @@ class FontPresets {
       fontWeight: FontWeight.normal,
       color: Color(0xffffffff));
 
+  static const TextStyle label = TextStyle(
+      fontSize: 13,
+      fontFamily: "OpenSans",
+      fontWeight: FontWeight.normal,
+      color: Color(0xff000000));
+
   static TextStyle colorTransform(TextStyle fromStyle, Color newColor) {
     TextStyle newStyle = TextStyle(
         color: newColor,
         fontSize: fromStyle.fontSize,
         fontFamily: fromStyle.fontFamily,
         fontWeight: fromStyle.fontWeight);
+    return newStyle;
+  }
+
+  static TextStyle weightTransform(TextStyle fromStyle, FontWeight newWeight) {
+    TextStyle newStyle = TextStyle(
+        color: fromStyle.color,
+        fontSize: fromStyle.fontSize,
+        fontFamily: fromStyle.fontFamily,
+        fontWeight: newWeight);
     return newStyle;
   }
 }
