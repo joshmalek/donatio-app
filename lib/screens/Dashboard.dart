@@ -33,16 +33,46 @@ class DashboardBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Column(children: [
-      Container(
-          child: Text("Dashboard: Header Placeholder"),
-          height: 50,
-          alignment: Alignment.centerLeft,
-          color: Colors.orange),
+      AppHeader(),
       LevelModal(10),
       ViewLeaderboard(),
       DonatedModal(1205.23, "\$"),
       DonatedList()
     ]));
+  }
+}
+
+class AppHeader extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        child: Row(
+          children: <Widget>[
+            Flexible(
+                flex: 1,
+                child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.teal,
+                        borderRadius: BorderRadius.circular(3)),
+                    margin: EdgeInsets.fromLTRB(10, 10, 10, 10))),
+            Flexible(
+                flex: 2,
+                child: Text("Billy Jean", style: FontPresets.buttonText)),
+            Flexible(
+                flex: 3,
+                child: Container(
+                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    child: Row(children: [
+                      Icon(Icomoon.hexagon2, size: 20, color: Colors.blue[200]),
+                      Icon(Icomoon.hexagon2,
+                          size: 20, color: Colors.brown[300]),
+                      Icon(Icomoon.hexagon2, size: 20, color: Colors.amber[200])
+                    ])))
+          ],
+        ),
+        margin: EdgeInsets.fromLTRB(50, 0, 50, 0),
+        height: 50,
+        alignment: Alignment.centerLeft);
   }
 }
 

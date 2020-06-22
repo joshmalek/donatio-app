@@ -27,9 +27,11 @@ class BottomNavbar extends StatefulWidget {
 //   }
 // }
 
-class _BottomNavbarState extends State<BottomNavbar> {
+class _BottomNavbarState extends State<BottomNavbar>
+    with SingleTickerProviderStateMixin {
   double _left = 5;
   int _pageIndex = 0;
+  TabController _tabController;
 
   final List<Widget> tabs = [
     DashboardBody(),
@@ -37,6 +39,18 @@ class _BottomNavbarState extends State<BottomNavbar> {
     LeaderboardBody(),
     DonateBody()
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 4, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   double _updateState(int iconIndex) {
     _pageIndex = iconIndex;
@@ -91,6 +105,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
                           flex: 2,
                           child: GestureDetector(
                               onTap: () {
+                                _tabController.index = 0;
                                 _updateState(0);
                                 // Navigator.of(context)
                                 //     .pushReplacementNamed('/dashboard');
@@ -102,6 +117,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
                           flex: 2,
                           child: GestureDetector(
                               onTap: () {
+                                _tabController.index = 1;
                                 _updateState(1);
                                 // Navigator.of(context)
                                 //     .pushReplacementNamed('/unlockedMedals');
@@ -122,6 +138,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
                           flex: 2,
                           child: GestureDetector(
                               onTap: () {
+                                _tabController.index = 2;
                                 _updateState(2);
                                 // Navigator.of(context)
                                 //     .pushReplacementNamed('/leaderboard');
@@ -133,6 +150,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
                           flex: 2,
                           child: GestureDetector(
                               onTap: () {
+                                _tabController.index = 3;
                                 _updateState(3);
                                 // Navigator.of(context)
                                 //     .pushReplacementNamed('/donate');
@@ -152,6 +170,15 @@ class _BottomNavbarState extends State<BottomNavbar> {
                     blurRadius: 8)
               ], color: Colors.white, borderRadius: BorderRadius.circular(5)),
             )),
-        body: tabs[_pageIndex]);
+        body: TabBarView(
+          children: <Widget>[
+            DashboardBody(),
+            UnlockedMedalsBody(),
+            LeaderboardBody(),
+            DonateBody()
+          ],
+          controller: _tabController,
+          physics: NeverScrollableScrollPhysics(),
+        ));
   }
 }
