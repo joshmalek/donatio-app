@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import './screens/Dashboard.dart';
+import './screens/LockedMedals.dart';
 import 'src/ThemePalette.dart';
 
 const baseUrl =
@@ -74,24 +75,24 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'My Http App',
         theme: ThemeData(
-            scaffoldBackgroundColor: Colors.white,
+            scaffoldBackgroundColor: Color(0xffC39ABB),
             textTheme: TextTheme(
                 headline1: TextStyle(
-                    fontSize: 20.0,
+                    fontSize: 30.0,
                     color: ThemePalette.black,
                     fontFamily: "Yan",
-                    fontWeight: FontWeight.normal),
+                    fontWeight: FontWeight.w600),
                 bodyText2: TextStyle(
                     fontSize: 12.0,
                     color: ThemePalette.black,
                     fontFamily: "OpenSans",
                     fontWeight: FontWeight.normal),
                 headline2: TextStyle(
-                    fontSize: 15.0,
+                    fontSize: 18.0,
                     color: ThemePalette.black,
                     fontFamily: "Yan",
                     fontWeight: FontWeight.normal))),
-        home: DashboardScreen());
+        home: LockedMedalScreen());
   }
 }
 

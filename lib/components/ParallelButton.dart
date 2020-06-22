@@ -1,5 +1,6 @@
 import '../src/ThemePalette.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class ParallelButton extends StatelessWidget {
   String _buttonValue;
@@ -12,7 +13,8 @@ class ParallelButton extends StatelessWidget {
         height: 30,
         alignment: Alignment.center,
         width: _width < 200 ? 200 : _width,
-        child: Text(this._buttonValue, style: TextStyle(fontSize: 13)),
+        child: Text(this._buttonValue,
+            style: TextStyle(fontSize: 13, color: Colors.white)),
         decoration: BoxDecoration(
             color: ThemePalette.black, borderRadius: BorderRadius.circular(3)));
   }
