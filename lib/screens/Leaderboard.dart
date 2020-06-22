@@ -152,7 +152,7 @@ class LeaderboardHeader extends StatelessWidget {
             Flexible(
                 flex: 1,
                 child: Container(
-                  child: Icon(Icomoon.lock, size: 20),
+                  child: Icon(Icons.filter_list, size: 20),
                   alignment: Alignment.centerRight,
                 ))
           ],
