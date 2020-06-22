@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:donatio_app/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -72,32 +73,34 @@ class MyApp extends StatelessWidget {
   @override
   build(context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'DonatIO',
-        theme: ThemeData(
-            scaffoldBackgroundColor: Color(0xffC39ABB),
-            textTheme: TextTheme(
-                headline1: TextStyle(
-                    fontSize: 30.0,
-                    color: ThemePalette.black,
-                    fontFamily: "Yan",
-                    fontWeight: FontWeight.w600),
-                bodyText2: TextStyle(
-                    fontSize: 12.0,
-                    color: ThemePalette.black,
-                    fontFamily: "OpenSans",
-                    fontWeight: FontWeight.normal),
-                headline2: TextStyle(
-                    fontSize: 18.0,
-                    color: ThemePalette.black,
-                    fontFamily: "Yan",
-                    fontWeight: FontWeight.normal),
-                headline3: TextStyle(
-                    fontSize: 60,
-                    fontFamily: "Yan",
-                    color: ThemePalette.black,
-                    fontWeight: FontWeight.w600))),
-        home: DashboardScreen());
+      debugShowCheckedModeBanner: false,
+      title: 'DonatIO',
+      theme: ThemeData(
+          scaffoldBackgroundColor: Color(0xffC39ABB),
+          textTheme: TextTheme(
+              headline1: TextStyle(
+                  fontSize: 30.0,
+                  color: ThemePalette.black,
+                  fontFamily: "Yan",
+                  fontWeight: FontWeight.w600),
+              bodyText2: TextStyle(
+                  fontSize: 12.0,
+                  color: ThemePalette.black,
+                  fontFamily: "OpenSans",
+                  fontWeight: FontWeight.normal),
+              headline2: TextStyle(
+                  fontSize: 18.0,
+                  color: ThemePalette.black,
+                  fontFamily: "Yan",
+                  fontWeight: FontWeight.normal),
+              headline3: TextStyle(
+                  fontSize: 60,
+                  fontFamily: "Yan",
+                  color: ThemePalette.black,
+                  fontWeight: FontWeight.w600))),
+      initialRoute: '/dashboard',
+      onGenerateRoute: RouteController.generateRoute,
+    );
   }
 }
 
