@@ -12,18 +12,71 @@ class RouteController {
 
     switch (settings.name) {
       case '/dashboard':
-        return MaterialPageRoute(builder: (_) => DashboardScreen());
+        return SlideRightRoute(page: DashboardScreen());
       case '/unlockedMedals':
-        return MaterialPageRoute(builder: (_) => UnlockedMedalsScreen());
+        return SlideRightRoute(page: UnlockedMedalsScreen());
       case '/lockedMedals':
-        return MaterialPageRoute(builder: (_) => LockedMedalScreen());
+        return SlideRightRoute(page: LockedMedalScreen());
       case '/leaderboard':
-        return MaterialPageRoute(builder: (_) => LeaderboardScreen());
+        return SlideRightRoute(page: LeaderboardScreen());
       case '/donate':
-        return MaterialPageRoute(builder: (_) => DonateScreen());
+        return SlideRightRoute(page: DonateScreen());
     }
 
     // default
-    return MaterialPageRoute(builder: (_) => DashboardScreen());
+    return MaterialPageRoute(
+        builder: (BuildContext context) => DashboardScreen());
   }
+}
+
+class SlideRightRoute extends PageRouteBuilder {
+  final Widget page;
+  SlideRightRoute({this.page})
+      : super(
+          pageBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+          ) =>
+              page,
+          transitionsBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+            Widget child,
+          ) =>
+              SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(-1, 0),
+              end: Offset.zero,
+            ).animate(animation),
+            child: child,
+          ),
+        );
+}
+
+class SlideLeftRoute extends PageRouteBuilder {
+  final Widget page;
+  SlideLeftRoute({this.page})
+      : super(
+          pageBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+          ) =>
+              page,
+          transitionsBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+            Widget child,
+          ) =>
+              SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(1, 0),
+              end: Offset.zero,
+            ).animate(animation),
+            child: child,
+          ),
+        );
 }
