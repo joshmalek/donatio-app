@@ -1,8 +1,10 @@
 import 'package:donatio_app/components/Navbar.dart';
+import 'package:donatio_app/components/ParallelButton.dart';
 import 'package:donatio_app/src/Icomoon.dart';
 import 'package:donatio_app/src/ThemePalette.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'Dashboard.dart';
 
@@ -180,9 +182,39 @@ class _MedalListState extends State<MedalList> {
         Flexible(
             flex: 1,
             child: Container(
-              color: Colors.green,
-              margin: EdgeInsets.fromLTRB(50, 0, 50, 0),
-            ))
+                margin: EdgeInsets.fromLTRB(50, 0, 50, 0),
+                child: Stack(
+                  children: <Widget>[
+                    Positioned(
+                      left: 10,
+                      child: Container(
+                        child: SvgPicture.asset(
+                          'assets/vault.svg',
+                          semanticsLabel: "Vault Graphic",
+                        ),
+                        width: 150,
+                        height: 150,
+                      ),
+                    ),
+                    Positioned(
+                        bottom: 10,
+                        left: 0,
+                        right: 0,
+                        child: Container(
+                            alignment: Alignment.center,
+                            height: 60,
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                    child: Text("38 locked medals"),
+                                    alignment: Alignment.center),
+                                Container(
+                                    child: ParallelButton(
+                                        "View Locked medals", 260))
+                              ],
+                            )))
+                  ],
+                )))
       ],
     ));
   }
