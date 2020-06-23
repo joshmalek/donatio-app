@@ -4,6 +4,9 @@ import 'package:donatio_app/src/Icomoon.dart';
 import 'package:donatio_app/src/ThemePalette.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../models/API.dart';
+import '../models/User.dart';
+import 'dart:convert';
 
 class LeaderboardScreen extends StatelessWidget {
   @override
@@ -27,51 +30,52 @@ class LeaderboardBody extends StatelessWidget {
   }
 }
 
-class LeaderboardList extends StatelessWidget {
+class LeaderboardList extends StatefulWidget {
+  @override
+  createState() => LeaderboardListState();
+}
+
+class LeaderboardListState extends State {
+  var users = new List<User>();
+  var name = "Felix Kjelberg";
+
+  _getUsers() {
+    API.getUsers().then((response) {
+      setState(() {
+        //print(response.body);
+        //print(json.decode(response.body)["data"]["users"][0]["medals"]);
+        Iterable list = json.decode(response.body)["data"]["users"];
+        users = list.map((model) => User.fromJson(model)).toList();
+        users.sort((a, b) => b.xp.compareTo(a.xp));
+      });
+    });
+  }
+
+  initState() {
+    super.initState();
+    _getUsers();
+  }
+
+  // this was causing issues
+  // dispose() {
+  //   super.dispose();
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
         child: Container(
             margin: EdgeInsets.fromLTRB(40, 10, 40, 0),
-            child: ListView(
-              children: <Widget>[
-                LeaderboardEntryPill(
-                    rank: 1, name: "Joey Salad", points: 100201),
-                LeaderboardEntryPill(
-                    rank: 2, name: "Joey Salad", points: 100201),
-                LeaderboardEntryPill(
-                    rank: 3, name: "Joey Salad", points: 100201),
-                LeaderboardEntryPill(
-                    rank: 4, name: "Joey Salad", points: 100201),
-                LeaderboardEntryPill(
-                    rank: 5, name: "Joey Salad", points: 100201),
-                LeaderboardEntryPill(
-                  rank: 1,
-                  name: "Joey Salad",
-                  points: 100201,
-                  isUser: true,
-                ),
-                LeaderboardEntryPill(
-                    rank: 1, name: "Joey Salad", points: 100201),
-                LeaderboardEntryPill(
-                    rank: 2, name: "Joey Salad", points: 100201),
-                LeaderboardEntryPill(
-                    rank: 3, name: "Joey Salad", points: 100201),
-                LeaderboardEntryPill(
-                    rank: 4, name: "Joey Salad", points: 100201),
-                LeaderboardEntryPill(
-                    rank: 5, name: "Joey Salad", points: 100201),
-                LeaderboardEntryPill(
-                    rank: 1, name: "Joey Salad", points: 100201),
-                LeaderboardEntryPill(
-                    rank: 2, name: "Joey Salad", points: 100201),
-                LeaderboardEntryPill(
-                    rank: 3, name: "Joey Salad", points: 100201),
-                LeaderboardEntryPill(
-                    rank: 4, name: "Joey Salad", points: 100201),
-                LeaderboardEntryPill(
-                    rank: 5, name: "Joey Salad", points: 100201),
-              ],
+            child: ListView.builder(
+              itemCount: users.length,
+              itemBuilder: (context, index) {
+                return LeaderboardEntryPill(
+                  name: users[index].name,
+                  rank: index + 1,
+                  points: users[index].xp,
+                  isUser: users[index].name == name ? true : false,
+                );
+              },
             )));
   }
 }
@@ -79,11 +83,11 @@ class LeaderboardList extends StatelessWidget {
 class LeaderboardEntryPill extends StatelessWidget {
   int _rank;
   String _name;
-  double _points;
+  int _points;
   bool _isUser;
 
   LeaderboardEntryPill(
-      {int rank, String name, double points, bool isUser = false}) {
+      {int rank, String name, int points, bool isUser = false}) {
     this._rank = rank;
     this._name = name;
     this._points = points;
