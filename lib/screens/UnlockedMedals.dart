@@ -110,7 +110,11 @@ class _MedalListState extends State<MedalList> {
                               decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(5)),
-                              margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                              margin: EdgeInsets.fromLTRB(
+                                  _focusIndex == medal_['id'] ? 0 : 10,
+                                  0,
+                                  _focusIndex == medal_['id'] ? 0 : 10,
+                                  10),
                               child: Row(
                                 children: <Widget>[
                                   Flexible(
@@ -177,7 +181,7 @@ class _MedalListState extends State<MedalList> {
                         ))
                     .toList(),
               ),
-              margin: EdgeInsets.fromLTRB(50, 20, 50, 0),
+              margin: EdgeInsets.fromLTRB(40, 20, 40, 0),
             )),
         Flexible(
             flex: 1,
