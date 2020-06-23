@@ -56,9 +56,10 @@ class LeaderboardListState extends State {
     _getUsers();
   }
 
-  dispose() {
-    super.dispose();
-  }
+  // this was causing issues
+  // dispose() {
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
