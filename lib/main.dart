@@ -4,69 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart' as http;
+
 import 'package:intl/intl.dart';
 import './screens/Dashboard.dart';
 import './screens/LockedMedals.dart';
 import 'components/Navbar.dart';
 import 'src/ThemePalette.dart';
-
-const baseUrl =
-    'http://3.21.56.172:4000/graphql?query={users{firstName,lastName,email,_id,experience,total_donated,medals{name,description,img_url}}}';
-
-class API {
-  static Future getUsers() {
-    //var url = baseUrl + "{users{id,firstName,lastName,email}}";
-    return http.get(baseUrl);
-  }
-}
-
-class Medal {
-  String name;
-  String description;
-  String imgUrl;
-
-  Medal(String name, String description, String imgUrl) {
-    this.name = name;
-    this.description = description;
-    this.imgUrl = imgUrl;
-  }
-
-  Medal.fromJson(Map json)
-      : name = json['name'],
-        description = json['description'],
-        imgUrl = json['img_url'];
-}
-
-class User {
-  String id;
-  String name;
-  String email;
-  int xp;
-  double donated;
-  List<dynamic> medals;
-
-  User(String id, String name, String email, int xp, double donated) {
-    this.id = id;
-    this.name = name;
-    this.email = email;
-    this.xp = xp;
-    this.donated = donated;
-  }
-
-  User.fromJson(Map json)
-      : id = json['_id'],
-        name = json['firstName'] + " " + json['lastName'],
-        email = json['email'],
-        xp = json['experience'].toInt(),
-        donated =
-            num.parse(json['total_donated'].toStringAsFixed(2)).toDouble(),
-        medals = json['medals'].map((model) => Medal.fromJson(model)).toList();
-
-  Map toJson() {
-    return {'id': id, 'name': name, 'email': email, 'xp': xp};
-  }
-}
+import 'models/User.dart';
+import 'models/Medal.dart';
+import 'models/API.dart';
 
 void main() => runApp(MyApp());
 
@@ -99,6 +45,7 @@ class MyApp extends StatelessWidget {
                   fontFamily: "Yan",
                   color: ThemePalette.black,
                   fontWeight: FontWeight.w600))),
+      home: Leaderboard(),
       initialRoute: '/bottomTabView',
       onGenerateRoute: RouteController.generateRoute,
     );
