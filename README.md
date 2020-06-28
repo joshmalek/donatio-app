@@ -3,15 +3,10 @@ Mobile App for Donatio built with Flutter. This will be compatible with iOS and 
 
 Dart is a language designed to run on all major systems.
 
-## Main features:
+## Install instructions:
 
-1. Leaderboard
+1.  Download the .apk file and load into into your Android device or your Android emulator.   A guide for doing this can be found [here](https://www.androidauthority.com/how-to-install-apks-31494/).
 
-2. Medals
+2.  Open the app and interact with it.
 
-3. Total donated
-
-4. EXP tracker
-
-5. Account settings
 
