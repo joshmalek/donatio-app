@@ -13,19 +13,18 @@ class BottomNavbar extends StatefulWidget {
   _BottomNavbarState createState() => _BottomNavbarState();
 }
 
-// class BottomNavigatableView extends StatelessWidget {
-
-//   int _currentIndex = 0;
-//   final List<Widget> tabs = [
-//     DashboardBody(),
-//     AnotherBody()
-//   ];
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return
-//   }
-// }
+/* Application Authentication Details
+ * - Once the application loads, check if there is any auth token present in the application. If so, fetch the user
+ * information based on the saved token and user that's logged in.
+ * - If the token is NOT authenticated by the backend or if no token exists, or if the token is expired, route to the login screen.
+ * 
+ * - If the token is authenticated by the backend, then store the data fetched into the global state.
+ * - Keep track of what time the data is re-fetched.
+ * - When the user routes to any page that requires data that is present in the database, if the last time the data was
+ * cached was more than 5 minutes ago, then refetch the data.
+ * 
+ * - If the user logs in and the credentials are valid, then create an auth token that expires after 7 days.
+*/
 
 class _BottomNavbarState extends State<BottomNavbar>
     with SingleTickerProviderStateMixin {
