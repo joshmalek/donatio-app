@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:donatio_app/routes.dart';
+import 'package:donatio_app/src/Auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -17,6 +18,8 @@ import 'models/API.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  final AppAuth _appAuth = new AppAuth();
+
   @override
   build(context) {
     return MaterialApp(
@@ -47,7 +50,9 @@ class MyApp extends StatelessWidget {
                   fontWeight: FontWeight.w600))),
       home: Leaderboard(),
       initialRoute: '/login',
-      onGenerateRoute: RouteController.generateRoute,
+      onGenerateRoute: (RouteSettings settings) {
+        return RouteController.generateRoute(settings, _appAuth);
+      },
     );
   }
 }

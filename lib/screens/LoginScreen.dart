@@ -1,4 +1,5 @@
 import 'package:donatio_app/components/ParallelButton.dart';
+import 'package:donatio_app/src/Auth.dart';
 import 'package:donatio_app/src/Icomoon.dart';
 import 'package:donatio_app/src/ThemePalette.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,6 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class LoginScreen extends StatelessWidget {
+  AppAuth authInstance;
+
+  LoginScreen(this.authInstance);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +34,7 @@ class LoginScreen extends StatelessWidget {
                 Container(
                     alignment: Alignment.centerLeft,
                     margin: EdgeInsets.fromLTRB(50, 0, 50, 0),
-                    child: LoginForm())
+                    child: LoginForm(this.authInstance))
               ],
             ),
           ),
@@ -38,14 +43,22 @@ class LoginScreen extends StatelessWidget {
 }
 
 class LoginForm extends StatefulWidget {
-  LoginForm({Key key}) : super(key: key);
+  AppAuth authInstance;
+
+  LoginForm(this.authInstance, {Key key}) : super(key: key);
 
   @override
-  _LoginFormState createState() => _LoginFormState();
+  _LoginFormState createState() => _LoginFormState(this.authInstance);
 }
 
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
+
+  AppAuth authInstance;
+  _LoginFormState(this.authInstance);
+
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +70,7 @@ class _LoginFormState extends State<LoginForm> {
         child: Column(
           children: <Widget>[
             TextFormField(
+              controller: _usernameController,
               decoration: InputDecoration(
                   hintText: "email",
                   icon: Padding(
@@ -74,6 +88,8 @@ class _LoginFormState extends State<LoginForm> {
               height: 30,
             ),
             TextFormField(
+              obscureText: true,
+              controller: _passwordController,
               decoration: InputDecoration(
                   hintText: "password",
                   icon: Padding(
@@ -87,6 +103,12 @@ class _LoginFormState extends State<LoginForm> {
                 margin: EdgeInsets.fromLTRB(0, 100, 0, 0),
                 child: ParallelButton.withAction("Login", 200, () {
                   print(_formKey.currentState.validate());
+
+                  if (_formKey.currentState.validate()) {
+                    // Attempt login if the fields are all valid
+                    authInstance.login(
+                        _usernameController.text, _passwordController.text);
+                  }
                   return null;
                 }))
           ],

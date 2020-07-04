@@ -2,6 +2,7 @@ import 'package:donatio_app/screens/Dashboard.dart';
 import 'package:donatio_app/screens/DonateScreen.dart';
 import 'package:donatio_app/screens/Leaderboard.dart';
 import 'package:donatio_app/screens/UnlockedMedals.dart';
+import 'package:donatio_app/src/Auth.dart';
 import 'package:donatio_app/src/Icomoon.dart';
 import 'package:donatio_app/src/ThemePalette.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,8 +10,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class BottomNavbar extends StatefulWidget {
+  AppAuth authInstance;
+  BottomNavbar(this.authInstance);
+
   @override
-  _BottomNavbarState createState() => _BottomNavbarState();
+  _BottomNavbarState createState() => _BottomNavbarState(authInstance);
 }
 
 /* Application Authentication Details
@@ -28,6 +32,9 @@ class BottomNavbar extends StatefulWidget {
 
 class _BottomNavbarState extends State<BottomNavbar>
     with SingleTickerProviderStateMixin {
+  AppAuth authInstance;
+  _BottomNavbarState(this.authInstance);
+
   double _left = 5;
   int _pageIndex = 0;
   TabController _tabController;
