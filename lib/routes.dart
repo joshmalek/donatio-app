@@ -3,6 +3,7 @@ import 'package:donatio_app/screens/Dashboard.dart';
 import 'package:donatio_app/screens/DonateScreen.dart';
 import 'package:donatio_app/screens/Leaderboard.dart';
 import 'package:donatio_app/screens/LockedMedals.dart';
+import 'package:donatio_app/screens/LoginScreen.dart';
 import 'package:donatio_app/screens/UnlockedMedals.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,8 @@ class RouteController {
         return SlideRightRoute(page: LeaderboardScreen());
       case '/donate':
         return SlideRightRoute(page: DonateScreen());
+      case '/login':
+        return SlideRightRoute(page: LoginScreen());
     }
 
     // default

@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
                   color: ThemePalette.black,
                   fontWeight: FontWeight.w600))),
       home: Leaderboard(),
-      initialRoute: '/bottomTabView',
+      initialRoute: '/login',
       onGenerateRoute: RouteController.generateRoute,
     );
   }
