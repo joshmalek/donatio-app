@@ -16,4 +16,8 @@ class API {
     //   return http.get(baseUrl +
     //       '{users{firstName,lastName,email,_id,experience,total_donated,medals{name,description,asset_key}}}');
   }
+
+  static Future getUserWeekReciepts(String user_id) {
+    // get the week reciepts for the user.
+  }
 }
