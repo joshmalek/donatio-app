@@ -12,12 +12,21 @@ class API {
   }
 
   static Future getUsers() {
-    //var url = baseUrl + "{users{id,firstName,lastName,email}}";
-    //   return http.get(baseUrl +
-    //       '{users{firstName,lastName,email,_id,experience,total_donated,medals{name,description,asset_key}}}');
+    String getUsersQuery =
+        "{ users { firstName, lastName, email, experience, medals, total_donated, _id } }";
+    return API.postQuery(baseUrl, getUsersQuery);
   }
 
-  static Future getUserWeekReciepts(String user_id) {
+  static Future getUserWeekReceipts(String user_id) {
     // get the week reciepts for the user.
+    String weekReceiptsQuery =
+        "{ weekReceipts(user_id:\"${user_id}\") {npo_id, amount, user_id, date_time} }";
+    return API.postQuery(baseUrl, weekReceiptsQuery);
+  }
+
+  static Future getUser(String user_id) {
+    String userQuery =
+        "{ user(_id: \"${user_id}\") { firstName, lastName, email, experience, medals, total_donated, _id, medals { name, description, alt_description, asset_key, date_awarded } } }";
+    return API.postQuery(baseUrl, userQuery);
   }
 }
