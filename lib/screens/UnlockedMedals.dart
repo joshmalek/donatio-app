@@ -20,6 +20,10 @@ import 'Dashboard.dart';
 // }
 
 class UnlockedMedalsBody extends StatelessWidget {
+  UnlockedMedalsBody() {
+    print("UnlockedMedalsBody instantiated.");
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(

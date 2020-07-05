@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:donatio_app/components/Navbar.dart';
+import 'package:donatio_app/models/API.dart';
+import 'package:donatio_app/src/Auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -27,8 +31,49 @@ import '../components/ParallelButton.dart';
 //         ])));
 //   }
 // }
+class DashboardBody extends StatefulWidget {
+  AppAuth authInstance;
+  DashboardBody(this.authInstance) {
+    print("DashboardBody instantiated");
+  }
 
-class DashboardBody extends StatelessWidget {
+  @override
+  _DashboardBodyState createState() => _DashboardBodyState(this.authInstance);
+}
+
+class _DashboardBodyState extends State<DashboardBody> {
+  AppAuth authInstance;
+
+  List<dynamic> user_receipts = null;
+
+  _DashboardBodyState(this.authInstance) {
+    print("DashboardBodyState instantiatd");
+    user_receipts = null;
+    fetch();
+  }
+
+  void fetch() {
+    // attempt to get the user's receipts
+    Future receiptsFuture = API.getUserWeekReceipts(
+        authInstance.userInfo == null
+            ? "<null>"
+            : authInstance.userInfo["_id"]);
+
+    receiptsFuture.then((res) {
+      print("Receipts responded with status ${res.statusCode}");
+      dynamic response = jsonDecode(res.body);
+      print(response.toString());
+
+      setState(() {
+        user_receipts = response["data"]["weekReceipts"];
+        print(user_receipts.toString());
+      });
+    }).catchError((error) {
+      print("Fetching receipts responded with error");
+      print(error);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -36,8 +81,8 @@ class DashboardBody extends StatelessWidget {
       AppHeader(),
       LevelModal(10),
       ViewLeaderboard(),
-      DonatedModal(1205.23, "\$"),
-      DonatedList()
+      DonatedModal(user_receipts == null ? 0 : 1205.23, "\$"),
+      user_receipts == null ? Container() : DonatedList(user_receipts)
     ]));
   }
 }
@@ -76,29 +121,18 @@ class AppHeader extends StatelessWidget {
   }
 }
 
-class AnotherBody extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(child: Text("Hope this works!"));
-  }
-}
-
 class DonatedList extends StatelessWidget {
+  List<dynamic> receipts;
+  DonatedList(this.receipts);
   @override
   Widget build(BuildContext context) {
     return Container(
         height: 120,
         child: ListView(
           scrollDirection: Axis.horizontal,
-          children: <Widget>[
-            singleDonation(),
-            singleDonation(),
-            singleDonation(),
-            singleDonation(),
-            singleDonation(),
-            singleDonation(),
-            singleDonation()
-          ],
+          children: receipts.map((e) {
+            return singleDonation(e["amount"]);
+          }).toList(),
         ),
         margin: EdgeInsets.fromLTRB(0, 20, 0, 0));
   }
@@ -139,7 +173,7 @@ class DonatedModal extends StatelessWidget {
   }
 }
 
-Widget singleDonation() {
+Widget singleDonation(dynamic amount) {
   return Container(
     padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
     margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
@@ -150,7 +184,7 @@ Widget singleDonation() {
           child: Text("Monday", style: FontPresets.buttonText),
           margin: EdgeInsets.fromLTRB(0, 0, 0, 15),
         ),
-        Text("\$1302.12",
+        Text("\$${amount}",
             style: FontPresets.colorTransform(
                 FontPresets.title2, ThemePalette.green2)),
         Text("to Black Lives Matter", style: FontPresets.buttonText)
@@ -160,28 +194,6 @@ Widget singleDonation() {
         color: ThemePalette.black, borderRadius: BorderRadius.circular(3)),
   );
 }
-
-// ListView(
-//           children: <Widget>[
-//             Container(
-//                 width: 100,
-//                 color: Colors.red,
-//                 margin: EdgeInsets.fromLTRB(0, 0, 10, 0)),
-//             Container(
-//                 width: 100,
-//                 color: Colors.blue,
-//                 margin: EdgeInsets.fromLTRB(0, 0, 10, 0)),
-//             Container(
-//                 width: 100,
-//                 color: Colors.cyan,
-//                 margin: EdgeInsets.fromLTRB(0, 0, 10, 0)),
-//             Container(
-//                 width: 100,
-//                 color: Colors.brown,
-//                 margin: EdgeInsets.fromLTRB(0, 0, 10, 0))
-//           ],
-//           scrollDirection: Axis.horizontal,
-//         )
 
 List<Widget> emptyDonationView = [
   Container(
