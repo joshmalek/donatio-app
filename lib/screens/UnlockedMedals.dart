@@ -20,28 +20,56 @@ import 'Dashboard.dart';
 //   }
 // }
 
-class UnlockedMedalsBody extends StatelessWidget {
+class UnlockedMedalsBody extends StatefulWidget {
   AppAuth authInstance;
   UnlockedMedalsBody(this.authInstance) {
-    print("UnlockedMedalsBody instantiated.");
+    print("UnlockedMedalsBodyState initialized:");
+
+    if (authInstance.userInfo.containsKey("medals")) {
+      print(authInstance.userInfo["medals"].toString());
+    } else {
+      print("No medals data found in userInfo");
+    }
+  }
+
+  @override
+  _UnlockedMedalsBodyState createState() =>
+      _UnlockedMedalsBodyState(authInstance);
+}
+
+class _UnlockedMedalsBodyState extends State<UnlockedMedalsBody> {
+  AppAuth authInstance;
+  List<dynamic> medalsList = null;
+  _UnlockedMedalsBodyState(this.authInstance) {
+    if (authInstance.userInfo.containsKey("medals")) {
+      medalsList = authInstance.userInfo["medals"];
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Column(
-        children: [AppHeader(authInstance), MedalsHeader(), MedalList()],
+        children: [
+          AppHeader(authInstance),
+          MedalsHeader(medalsList),
+          MedalList(medalsList)
+        ],
       ),
     );
   }
 }
 
 class MedalList extends StatefulWidget {
-  _MedalListState createState() => _MedalListState();
+  List<dynamic> medalsList;
+  MedalList(this.medalsList);
+  _MedalListState createState() => _MedalListState(medalsList);
 }
 
 class _MedalListState extends State<MedalList> {
-  int _focusIndex = 0;
+  List<dynamic> medalsList;
+  _MedalListState(this.medalsList);
+  String _focusIndex = "";
 
   List<Map<String, dynamic>> medalsData = [
     {
@@ -88,7 +116,7 @@ class _MedalListState extends State<MedalList> {
     }
   ];
 
-  void _updateState(int newFocusIndex) {
+  void _updateState(String newFocusIndex) {
     setState(() {
       _focusIndex = newFocusIndex;
     });
@@ -103,89 +131,101 @@ class _MedalListState extends State<MedalList> {
             flex: 3,
             child: Container(
               child: ListView(
-                children: medalsData
-                    .map((medal_) => GestureDetector(
-                          onTap: () {
-                            _updateState(medal_['id']);
-                          },
-                          child: AnimatedContainer(
-                              duration: Duration(milliseconds: 500),
-                              curve: Curves.fastOutSlowIn,
-                              height: _focusIndex == medal_['id'] ? 120 : 45,
-                              alignment: Alignment.topLeft,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(5)),
-                              margin: EdgeInsets.fromLTRB(
-                                  _focusIndex == medal_['id'] ? 0 : 10,
-                                  0,
-                                  _focusIndex == medal_['id'] ? 0 : 10,
-                                  10),
-                              child: Row(
-                                children: <Widget>[
-                                  Flexible(
-                                      flex: 1,
-                                      child: Container(
-                                          decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(5),
-                                                  bottomLeft:
-                                                      Radius.circular(5)),
-                                              color: _focusIndex == medal_['id']
-                                                  ? ThemePalette.green3
-                                                  : Colors.white),
-                                          padding:
-                                              EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                          alignment: Alignment.topCenter,
-                                          child: Icon(Icomoon.hexagon2))),
-                                  Flexible(
-                                      flex: 5,
-                                      child: Column(
-                                        children: <Widget>[
-                                          Flexible(
-                                              flex: 1,
-                                              child: Container(
-                                                  child: Row(
-                                                children: <Widget>[
-                                                  Flexible(
-                                                      flex: 3,
-                                                      child: Container(
-                                                        margin:
-                                                            EdgeInsets.fromLTRB(
-                                                                15, 0, 0, 0),
-                                                        child: Text(
-                                                            medal_["name"]),
-                                                        alignment: Alignment
-                                                            .centerLeft,
-                                                      )),
-                                                  Flexible(
-                                                      flex: 1,
-                                                      child: Container(
-                                                          child: Text(
-                                                              medal_["date"]),
-                                                          alignment:
-                                                              Alignment.center))
-                                                ],
-                                              ))),
-                                          Flexible(
-                                              flex: _focusIndex == medal_['id']
-                                                  ? 3
-                                                  : 0,
-                                              child: Container(
-                                                  alignment: Alignment.topLeft,
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      15, 0, 0, 0),
-                                                  child: _focusIndex ==
-                                                          medal_['id']
-                                                      ? Text(
-                                                          medal_['description'])
-                                                      : null))
-                                        ],
-                                      ))
-                                ],
-                              )),
-                        ))
-                    .toList(),
+                children: medalsList == null
+                    ? []
+                    : medalsList
+                        .map((medal_) => GestureDetector(
+                              onTap: () {
+                                print(medal_);
+                                _updateState(medal_['_id']);
+                              },
+                              child: AnimatedContainer(
+                                  duration: Duration(milliseconds: 500),
+                                  curve: Curves.fastOutSlowIn,
+                                  height:
+                                      _focusIndex == medal_['_id'] ? 120 : 45,
+                                  alignment: Alignment.topLeft,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(5)),
+                                  margin: EdgeInsets.fromLTRB(
+                                      _focusIndex == medal_['_id'] ? 0 : 10,
+                                      0,
+                                      _focusIndex == medal_['_id'] ? 0 : 10,
+                                      10),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Flexible(
+                                          flex: 1,
+                                          child: Container(
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                          topLeft: Radius
+                                                              .circular(5),
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  5)),
+                                                  color: _focusIndex ==
+                                                          medal_['_id']
+                                                      ? ThemePalette.green3
+                                                      : Colors.white),
+                                              padding: EdgeInsets.fromLTRB(
+                                                  0, 10, 0, 0),
+                                              alignment: Alignment.topCenter,
+                                              child: Icon(Icomoon.hexagon2))),
+                                      Flexible(
+                                          flex: 5,
+                                          child: Column(
+                                            children: <Widget>[
+                                              Flexible(
+                                                  flex: 1,
+                                                  child: Container(
+                                                      child: Row(
+                                                    children: <Widget>[
+                                                      Flexible(
+                                                          flex: 3,
+                                                          child: Container(
+                                                            margin: EdgeInsets
+                                                                .fromLTRB(15, 0,
+                                                                    0, 0),
+                                                            child: Text(
+                                                                medal_["name"]),
+                                                            alignment: Alignment
+                                                                .centerLeft,
+                                                          )),
+                                                      Flexible(
+                                                          flex: 1,
+                                                          child: Container(
+                                                              child: Text(
+                                                                  "Date placeholder."),
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center))
+                                                    ],
+                                                  ))),
+                                              Flexible(
+                                                  flex: _focusIndex ==
+                                                          medal_['_id']
+                                                      ? 3
+                                                      : 0,
+                                                  child: Container(
+                                                      alignment:
+                                                          Alignment.topLeft,
+                                                      padding:
+                                                          EdgeInsets.fromLTRB(
+                                                              15, 0, 0, 0),
+                                                      child: _focusIndex ==
+                                                              medal_['_id']
+                                                          ? Text(
+                                                              "You ${medal_['description']}")
+                                                          : null))
+                                            ],
+                                          ))
+                                    ],
+                                  )),
+                            ))
+                        .toList(),
               ),
               margin: EdgeInsets.fromLTRB(40, 20, 40, 0),
             )),
@@ -231,6 +271,8 @@ class _MedalListState extends State<MedalList> {
 }
 
 class MedalsHeader extends StatelessWidget {
+  List<dynamic> medalsList = null;
+  MedalsHeader(this.medalsList);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -243,7 +285,9 @@ class MedalsHeader extends StatelessWidget {
               alignment: Alignment.centerLeft,
             ),
             Container(
-              child: Text("You unlocked 5 medals", style: FontPresets.label),
+              child: Text(
+                  "You unlocked ${medalsList == null ? 0 : medalsList.length} medals",
+                  style: FontPresets.label),
               alignment: Alignment.centerLeft,
             )
           ],

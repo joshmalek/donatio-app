@@ -78,7 +78,7 @@ class AppAuth {
         "Current auth values:\n\taccessLevel: ${accessLevel}\n\t${userInfo == null ? "null" : userInfo.toString()}");
 
     String loginQuery =
-        'mutation { login(email: "${email}", password: "${password}") {_id, firstName, lastName, experience, medals { name, description, alt_description, asset_key, _id }} }';
+        'mutation { login(email: "${email}", password: "${password}") {_id, firstName, lastName, experience, medals { name, description, date_awarded, alt_description, asset_key, _id }} }';
     Future loginRequest = API.postQuery(API_URL, loginQuery);
 
     loginRequest.then((res) {
