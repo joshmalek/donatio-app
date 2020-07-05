@@ -13,25 +13,48 @@ import '../src/ThemePalette.dart';
 import '../src/Icomoon.dart';
 import '../components/ParallelButton.dart';
 
-// class DashboardScreen extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//         bottomNavigationBar: BottomNavbar(),
-//         body: SafeArea(
-//             child: Column(children: [
-//           Container(
-//               child: Text("Dashboard: Header Placeholder"),
-//               height: 50,
-//               alignment: Alignment.centerLeft,
-//               color: Colors.orange),
-//           LevelModal(10),
-//           ViewLeaderboard(),
-//           DonatedModal(1205.23, "\$"),
-//           DonatedList()
-//         ])));
-//   }
-// }
+double evaluateExperience(double experience_value) {
+  if (experience_value == 0) return 1;
+  return log((5 * experience_value) + 1);
+}
+
+int getLevel(double experience) {
+  // get the level of the user based on the experience
+  return evaluateExperience(experience).floor();
+}
+
+double getExperiencePercent(double experience) {
+  double experienceLevel = evaluateExperience(experience);
+  // find the experience for the low and high level.
+  int lowerLevel = getLevel(experience);
+  int higherLevel = lowerLevel + 1;
+
+  // find the experience needed for lowerLevel and the experience
+  // needed for highLevel
+  double base = 2.71828;
+  double lowerLevelExp = (pow(base, lowerLevel) - 1) / 5;
+  double higherLevelExp = (pow(base, higherLevel) - 1) / 5;
+
+  // experience should be between lowerLevelExp and higherLevelExp
+  if (experience >= lowerLevelExp && experience <= higherLevelExp) {
+    double percent_ =
+        (experience - lowerLevelExp) / (higherLevelExp - lowerLevelExp);
+    print("Exp Percent is : ${percent_}");
+    print("lower level: ${lowerLevel}, higher level: ${higherLevel}");
+    print("${lowerLevelExp} < ${experience} < ${higherLevelExp}");
+    return max(0, min(percent_, 1));
+  } else {
+    print("Calculating getExperiencePercent went wrong...");
+    print("lower level: ${lowerLevel}, higher level: ${higherLevel}");
+    print("${lowerLevelExp} < ${experience} < ${higherLevelExp}");
+    return 0;
+  }
+}
+
+int getRaminingExperience(double experience) {
+  return 10;
+}
+
 class DashboardBody extends StatefulWidget {
   AppAuth authInstance;
   DashboardBody(this.authInstance) {
@@ -92,7 +115,14 @@ class _DashboardBodyState extends State<DashboardBody> {
     return SafeArea(
         child: Column(children: [
       AppHeader(authInstance),
-      LevelModal(10),
+      LevelModal(
+          getLevel(authInstance.userInfo.containsKey("experience")
+              ? authInstance.userInfo["experience"]
+              : 0),
+          getExperiencePercent(authInstance.userInfo.containsKey("experience")
+              ? authInstance.userInfo["experience"]
+              : 0),
+          200),
       ViewLeaderboard(),
       DonatedModal(user_receipts == null ? 0 : receiptTotal(), "\$"),
       user_receipts == null ? Container() : DonatedList(user_receipts)
@@ -255,7 +285,11 @@ class ViewLeaderboard extends StatelessWidget {
 
 class LevelModal extends StatelessWidget {
   int _level;
-  LevelModal(this._level);
+  double experiencePercent;
+  int experienceReamining;
+  LevelModal(this._level, this.experiencePercent, this.experienceReamining) {
+    print("Experience Percent: ${this.experiencePercent}");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -277,12 +311,13 @@ class LevelModal extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: FractionallySizedBox(
               heightFactor: 1,
-              widthFactor: 0.4,
+              widthFactor: this.experiencePercent,
               child: Container(color: Colors.black),
             )),
         Container(
           alignment: Alignment.centerLeft,
-          child: Text('20 more experience until you reach level ${_level + 1}!',
+          child: Text(
+              '${experienceReamining} more experience until you reach level ${_level + 1}!',
               style: FontPresets.small),
           margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
         )
