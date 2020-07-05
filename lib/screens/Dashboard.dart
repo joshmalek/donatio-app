@@ -74,6 +74,18 @@ class _DashboardBodyState extends State<DashboardBody> {
     });
   }
 
+  double receiptTotal() {
+    // sum up the values in the receipt and return the total
+    // amount.
+    double total = 0;
+    for (int i = 0; i < user_receipts.length; ++i) {
+      if (user_receipts[i].containsKey("amount"))
+        total += user_receipts[i]["amount"];
+    }
+
+    return total;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -81,7 +93,7 @@ class _DashboardBodyState extends State<DashboardBody> {
       AppHeader(),
       LevelModal(10),
       ViewLeaderboard(),
-      DonatedModal(user_receipts == null ? 0 : 1205.23, "\$"),
+      DonatedModal(user_receipts == null ? 0 : receiptTotal(), "\$"),
       user_receipts == null ? Container() : DonatedList(user_receipts)
     ]));
   }
