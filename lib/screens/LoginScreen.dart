@@ -107,7 +107,9 @@ class _LoginFormState extends State<LoginForm> {
                   if (_formKey.currentState.validate()) {
                     // Attempt login if the fields are all valid
                     authInstance.login(
-                        _usernameController.text, _passwordController.text);
+                        _usernameController.text, _passwordController.text, () {
+                      print("Successfully logged in!");
+                    });
                   }
                   return null;
                 }))
