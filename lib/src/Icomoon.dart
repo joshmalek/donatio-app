@@ -18,4 +18,7 @@ class Icomoon {
   static const IconData hexagon2 = IconData(0xe901, fontFamily: 'icomoon2');
   static const IconData coin = IconData(0xe902, fontFamily: 'icomoon2');
   static const IconData dashboard = IconData(0xe903, fontFamily: 'icomoon2');
+  static const IconData profile = IconData(0xe901, fontFamily: 'icomoon3');
+  static const IconData lock2 = IconData(0xe902, fontFamily: 'icomoon3');
+  static const IconData check = IconData(0xe900, fontFamily: 'icomoon3');
 }

@@ -8,25 +8,25 @@ import '../src/ThemePalette.dart';
 import '../src/Icomoon.dart';
 import '../components/ParallelButton.dart';
 
-class DashboardScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        bottomNavigationBar: BottomNavbar(),
-        body: SafeArea(
-            child: Column(children: [
-          Container(
-              child: Text("Dashboard: Header Placeholder"),
-              height: 50,
-              alignment: Alignment.centerLeft,
-              color: Colors.orange),
-          LevelModal(10),
-          ViewLeaderboard(),
-          DonatedModal(1205.23, "\$"),
-          DonatedList()
-        ])));
-  }
-}
+// class DashboardScreen extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//         bottomNavigationBar: BottomNavbar(),
+//         body: SafeArea(
+//             child: Column(children: [
+//           Container(
+//               child: Text("Dashboard: Header Placeholder"),
+//               height: 50,
+//               alignment: Alignment.centerLeft,
+//               color: Colors.orange),
+//           LevelModal(10),
+//           ViewLeaderboard(),
+//           DonatedModal(1205.23, "\$"),
+//           DonatedList()
+//         ])));
+//   }
+// }
 
 class DashboardBody extends StatelessWidget {
   @override

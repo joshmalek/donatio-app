@@ -8,16 +8,16 @@ import '../models/API.dart';
 import '../models/User.dart';
 import 'dart:convert';
 
-class LeaderboardScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body: SafeArea(
-          child: Text("Leaderboard Screen Placeholder"),
-        ),
-        bottomNavigationBar: BottomNavbar());
-  }
-}
+// class LeaderboardScreen extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//         body: SafeArea(
+//           child: Text("Leaderboard Screen Placeholder"),
+//         ),
+//         bottomNavigationBar: BottomNavbar());
+//   }
+// }
 
 class LeaderboardBody extends StatelessWidget {
   @override

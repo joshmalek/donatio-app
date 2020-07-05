@@ -8,16 +8,16 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'Dashboard.dart';
 
-class UnlockedMedalsScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body: SafeArea(
-          child: Text("Unlocked Medals Screen Placeholder"),
-        ),
-        bottomNavigationBar: BottomNavbar());
-  }
-}
+// class UnlockedMedalsScreen extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//         body: SafeArea(
+//           child: Text("Unlocked Medals Screen Placeholder"),
+//         ),
+//         bottomNavigationBar: BottomNavbar());
+//   }
+// }
 
 class UnlockedMedalsBody extends StatelessWidget {
   @override

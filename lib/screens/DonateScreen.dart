@@ -6,16 +6,16 @@ import 'package:donatio_app/src/ThemePalette.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class DonateScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body: SafeArea(
-          child: Text("Donate Screen Placeholder"),
-        ),
-        bottomNavigationBar: BottomNavbar());
-  }
-}
+// class DonateScreen extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//         body: SafeArea(
+//           child: Text("Donate Screen Placeholder"),
+//         ),
+//         bottomNavigationBar: BottomNavbar());
+//   }
+// }
 
 class DonateBody extends StatelessWidget {
   @override
