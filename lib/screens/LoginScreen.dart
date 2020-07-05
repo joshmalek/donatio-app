@@ -107,8 +107,13 @@ class _LoginFormState extends State<LoginForm> {
                   if (_formKey.currentState.validate()) {
                     // Attempt login if the fields are all valid
                     authInstance.login(
-                        _usernameController.text, _passwordController.text, () {
+                        _usernameController.text, _passwordController.text,
+                        onSuccess: () {
                       print("Successfully logged in!");
+                      // attempt to navigate to the next scene.
+                      Navigator.pushNamed(context, "/bottomTabView");
+                    }, onFailure: () {
+                      print("Login attempt failed...");
                     });
                   }
                   return null;
