@@ -1,6 +1,7 @@
 import 'package:donatio_app/components/Navbar.dart';
 import 'package:donatio_app/components/ParallelButton.dart';
 import 'package:donatio_app/screens/Dashboard.dart';
+import 'package:donatio_app/src/Auth.dart';
 import 'package:donatio_app/src/Icomoon.dart';
 import 'package:donatio_app/src/ThemePalette.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,12 +19,14 @@ import 'package:flutter/material.dart';
 // }
 
 class DonateBody extends StatelessWidget {
+  AppAuth authInstance;
+  DonateBody(this.authInstance);
   @override
   Widget build(BuildContext conext) {
     return SafeArea(
         child: Column(
       children: <Widget>[
-        AppHeader(),
+        AppHeader(authInstance),
         DonateHeader(),
         DonateParagraph(
             index: 1,

@@ -1,5 +1,6 @@
 import 'package:donatio_app/components/Navbar.dart';
 import 'package:donatio_app/components/ParallelButton.dart';
+import 'package:donatio_app/src/Auth.dart';
 import 'package:donatio_app/src/Icomoon.dart';
 import 'package:donatio_app/src/ThemePalette.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,7 +21,8 @@ import 'Dashboard.dart';
 // }
 
 class UnlockedMedalsBody extends StatelessWidget {
-  UnlockedMedalsBody() {
+  AppAuth authInstance;
+  UnlockedMedalsBody(this.authInstance) {
     print("UnlockedMedalsBody instantiated.");
   }
 
@@ -28,7 +30,7 @@ class UnlockedMedalsBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Column(
-        children: [AppHeader(), MedalsHeader(), MedalList()],
+        children: [AppHeader(authInstance), MedalsHeader(), MedalList()],
       ),
     );
   }

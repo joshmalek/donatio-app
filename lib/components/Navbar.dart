@@ -172,9 +172,9 @@ class _BottomNavbarState extends State<BottomNavbar>
         body: TabBarView(
           children: <Widget>[
             DashboardBody(authInstance),
-            UnlockedMedalsBody(),
-            LeaderboardBody(),
-            DonateBody()
+            UnlockedMedalsBody(authInstance),
+            LeaderboardBody(authInstance),
+            DonateBody(authInstance)
           ],
           controller: _tabController,
           physics: NeverScrollableScrollPhysics(),

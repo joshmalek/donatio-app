@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'dart:math';
 
 import '../src/ThemePalette.dart';
 import '../src/Icomoon.dart';
@@ -83,14 +84,14 @@ class _DashboardBodyState extends State<DashboardBody> {
         total += user_receipts[i]["amount"];
     }
 
-    return total;
+    return roundDouble(total, 2);
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Column(children: [
-      AppHeader(),
+      AppHeader(authInstance),
       LevelModal(10),
       ViewLeaderboard(),
       DonatedModal(user_receipts == null ? 0 : receiptTotal(), "\$"),
@@ -100,6 +101,15 @@ class _DashboardBodyState extends State<DashboardBody> {
 }
 
 class AppHeader extends StatelessWidget {
+  AppAuth authInstance;
+
+  AppHeader(this.authInstance);
+
+  String getFullName() {
+    if (authInstance.userInfo == null) return "<undefined>";
+    return "${authInstance.userInfo["firstName"]} ${authInstance.userInfo["lastName"]}";
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -114,7 +124,7 @@ class AppHeader extends StatelessWidget {
                     margin: EdgeInsets.fromLTRB(10, 10, 10, 10))),
             Flexible(
                 flex: 2,
-                child: Text("Billy Jean", style: FontPresets.buttonText)),
+                child: Text(getFullName(), style: FontPresets.buttonText)),
             Flexible(
                 flex: 3,
                 child: Container(
@@ -286,4 +296,9 @@ class LevelModal extends StatelessWidget {
       ], color: Colors.white, borderRadius: BorderRadius.circular(5)),
     );
   }
+}
+
+double roundDouble(double value, int places) {
+  double mod = pow(10.0, places);
+  return ((value * mod).round().toDouble() / mod);
 }
