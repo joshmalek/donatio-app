@@ -52,7 +52,13 @@ double getExperiencePercent(double experience) {
 }
 
 int getRaminingExperience(double experience) {
-  return 10;
+  double experienceLevel = evaluateExperience(experience);
+  // find the experience for the low and high level.
+  int higherLevel = getLevel(experience) + 1;
+
+  double base = 2.71828;
+  double higherLevelExp = (pow(base, higherLevel) - 1) / 5;
+  return (higherLevelExp - experience).floor();
 }
 
 class DashboardBody extends StatefulWidget {
@@ -122,7 +128,9 @@ class _DashboardBodyState extends State<DashboardBody> {
           getExperiencePercent(authInstance.userInfo.containsKey("experience")
               ? authInstance.userInfo["experience"]
               : 0),
-          200),
+          getRaminingExperience(authInstance.userInfo.containsKey("experience")
+              ? authInstance.userInfo["experience"]
+              : 0)),
       ViewLeaderboard(),
       DonatedModal(user_receipts == null ? 0 : receiptTotal(), "\$"),
       user_receipts == null ? Container() : DonatedList(user_receipts)
