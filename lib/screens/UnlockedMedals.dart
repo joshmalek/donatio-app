@@ -79,9 +79,21 @@ class _MedalListState extends State<MedalList> {
             child: Container(
               child: ListView(
                 children: medalsList == null
-                    ? []
+                    ? [
+                        Container(
+                          alignment: Alignment.center,
+                          height: 250,
+                          child: Text(
+                            "You have no medals yet\nDonate to unlock your first medal!",
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                      ]
                     : medalsList.map((medal_) {
                         dynamic award_date = medal_['date_awarded'];
+                        // print("Date Awarded: ${award_date}");
+                        // print(
+                        //     "Date Awarded is String ? ${award_date is String}");
                         int timestamp = int.parse(award_date);
                         DateTime time_ = DateTime.fromMicrosecondsSinceEpoch(
                             timestamp * 1000);
