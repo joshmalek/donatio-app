@@ -39,13 +39,6 @@ class _BottomNavbarState extends State<BottomNavbar>
   int _pageIndex = 0;
   TabController _tabController;
 
-  final List<Widget> tabs = [
-    DashboardBody(),
-    UnlockedMedalsBody(),
-    LeaderboardBody(),
-    DonateBody()
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -178,10 +171,10 @@ class _BottomNavbarState extends State<BottomNavbar>
             )),
         body: TabBarView(
           children: <Widget>[
-            DashboardBody(),
-            UnlockedMedalsBody(),
-            LeaderboardBody(),
-            DonateBody()
+            DashboardBody(authInstance),
+            UnlockedMedalsBody(authInstance),
+            LeaderboardBody(authInstance),
+            DonateBody(authInstance)
           ],
           controller: _tabController,
           physics: NeverScrollableScrollPhysics(),

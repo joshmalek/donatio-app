@@ -1,5 +1,6 @@
 import 'package:donatio_app/components/Navbar.dart';
 import 'package:donatio_app/components/ParallelButton.dart';
+import 'package:donatio_app/src/Auth.dart';
 import 'package:donatio_app/src/Icomoon.dart';
 import 'package:donatio_app/src/ThemePalette.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,70 +20,50 @@ import 'Dashboard.dart';
 //   }
 // }
 
-class UnlockedMedalsBody extends StatelessWidget {
+class UnlockedMedalsBody extends StatefulWidget {
+  AppAuth authInstance;
+  UnlockedMedalsBody(this.authInstance);
+
+  @override
+  _UnlockedMedalsBodyState createState() =>
+      _UnlockedMedalsBodyState(authInstance);
+}
+
+class _UnlockedMedalsBodyState extends State<UnlockedMedalsBody> {
+  AppAuth authInstance;
+  List<dynamic> medalsList = null;
+  _UnlockedMedalsBodyState(this.authInstance) {
+    if (authInstance.userInfo.containsKey("medals")) {
+      medalsList = authInstance.userInfo["medals"];
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Column(
-        children: [AppHeader(), MedalsHeader(), MedalList()],
+        children: [
+          AppHeader(authInstance),
+          MedalsHeader(medalsList),
+          MedalList(medalsList)
+        ],
       ),
     );
   }
 }
 
 class MedalList extends StatefulWidget {
-  _MedalListState createState() => _MedalListState();
+  List<dynamic> medalsList;
+  MedalList(this.medalsList);
+  _MedalListState createState() => _MedalListState(medalsList);
 }
 
 class _MedalListState extends State<MedalList> {
-  int _focusIndex = 0;
+  List<dynamic> medalsList;
+  _MedalListState(this.medalsList);
+  String _focusIndex = "";
 
-  List<Map<String, dynamic>> medalsData = [
-    {
-      'name': 'First Donation',
-      'date': 'June 10',
-      'description': 'Made your first donation to a charity.',
-      'id': 1
-    },
-    {
-      'name': 'First Donation',
-      'date': 'June 10',
-      'description': 'Made your first donation to a charity.',
-      'id': 2
-    },
-    {
-      'name': 'First Donation',
-      'date': 'June 10',
-      'description': 'Made your first donation to a charity.',
-      'id': 3
-    },
-    {
-      'name': 'First Donation',
-      'date': 'June 10',
-      'description': 'Made your first donation to a charity.',
-      'id': 4
-    },
-    {
-      'name': 'First Donation',
-      'date': 'June 10',
-      'description': 'Made your first donation to a charity.',
-      'id': 5
-    },
-    {
-      'name': 'First Donation',
-      'date': 'June 10',
-      'description': 'Made your first donation to a charity.',
-      'id': 6
-    },
-    {
-      'name': 'First Donation',
-      'date': 'June 10',
-      'description': 'Made your first donation to a charity.',
-      'id': 7
-    }
-  ];
-
-  void _updateState(int newFocusIndex) {
+  void _updateState(String newFocusIndex) {
     setState(() {
       _focusIndex = newFocusIndex;
     });
@@ -97,23 +78,32 @@ class _MedalListState extends State<MedalList> {
             flex: 3,
             child: Container(
               child: ListView(
-                children: medalsData
-                    .map((medal_) => GestureDetector(
+                children: medalsList == null
+                    ? []
+                    : medalsList.map((medal_) {
+                        dynamic award_date = medal_['date_awarded'];
+                        int timestamp = int.parse(award_date);
+                        DateTime time_ = DateTime.fromMicrosecondsSinceEpoch(
+                            timestamp * 1000);
+                        String formatted_date = getDateString(time_);
+
+                        return GestureDetector(
                           onTap: () {
-                            _updateState(medal_['id']);
+                            print(medal_);
+                            _updateState(medal_['_id']);
                           },
                           child: AnimatedContainer(
                               duration: Duration(milliseconds: 500),
                               curve: Curves.fastOutSlowIn,
-                              height: _focusIndex == medal_['id'] ? 120 : 45,
+                              height: _focusIndex == medal_['_id'] ? 120 : 45,
                               alignment: Alignment.topLeft,
                               decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(5)),
                               margin: EdgeInsets.fromLTRB(
-                                  _focusIndex == medal_['id'] ? 0 : 10,
+                                  _focusIndex == medal_['_id'] ? 0 : 10,
                                   0,
-                                  _focusIndex == medal_['id'] ? 0 : 10,
+                                  _focusIndex == medal_['_id'] ? 0 : 10,
                                   10),
                               child: Row(
                                 children: <Widget>[
@@ -125,9 +115,10 @@ class _MedalListState extends State<MedalList> {
                                                   topLeft: Radius.circular(5),
                                                   bottomLeft:
                                                       Radius.circular(5)),
-                                              color: _focusIndex == medal_['id']
-                                                  ? ThemePalette.green3
-                                                  : Colors.white),
+                                              color:
+                                                  _focusIndex == medal_['_id']
+                                                      ? ThemePalette.green3
+                                                      : Colors.white),
                                           padding:
                                               EdgeInsets.fromLTRB(0, 10, 0, 0),
                                           alignment: Alignment.topCenter,
@@ -142,7 +133,7 @@ class _MedalListState extends State<MedalList> {
                                                   child: Row(
                                                 children: <Widget>[
                                                   Flexible(
-                                                      flex: 3,
+                                                      flex: 2,
                                                       child: Container(
                                                         margin:
                                                             EdgeInsets.fromLTRB(
@@ -155,14 +146,18 @@ class _MedalListState extends State<MedalList> {
                                                   Flexible(
                                                       flex: 1,
                                                       child: Container(
+                                                          margin:
+                                                              EdgeInsets
+                                                                  .fromLTRB(0,
+                                                                      0, 20, 0),
                                                           child: Text(
-                                                              medal_["date"]),
+                                                              formatted_date),
                                                           alignment:
                                                               Alignment.center))
                                                 ],
                                               ))),
                                           Flexible(
-                                              flex: _focusIndex == medal_['id']
+                                              flex: _focusIndex == medal_['_id']
                                                   ? 3
                                                   : 0,
                                               child: Container(
@@ -170,16 +165,16 @@ class _MedalListState extends State<MedalList> {
                                                   padding: EdgeInsets.fromLTRB(
                                                       15, 0, 0, 0),
                                                   child: _focusIndex ==
-                                                          medal_['id']
+                                                          medal_['_id']
                                                       ? Text(
-                                                          medal_['description'])
+                                                          "You ${medal_['description']}")
                                                       : null))
                                         ],
                                       ))
                                 ],
                               )),
-                        ))
-                    .toList(),
+                        );
+                      }).toList(),
               ),
               margin: EdgeInsets.fromLTRB(40, 20, 40, 0),
             )),
@@ -225,6 +220,8 @@ class _MedalListState extends State<MedalList> {
 }
 
 class MedalsHeader extends StatelessWidget {
+  List<dynamic> medalsList = null;
+  MedalsHeader(this.medalsList);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -237,10 +234,60 @@ class MedalsHeader extends StatelessWidget {
               alignment: Alignment.centerLeft,
             ),
             Container(
-              child: Text("You unlocked 5 medals", style: FontPresets.label),
+              child: Text(
+                  "You unlocked ${medalsList == null ? 0 : medalsList.length} medals",
+                  style: FontPresets.label),
               alignment: Alignment.centerLeft,
             )
           ],
         ));
   }
+}
+
+String getDateString(DateTime time_) {
+  String formatted_date = "";
+  if (time_ == null) return "invalid";
+
+  // get the month;
+  switch (time_.month) {
+    case DateTime.january:
+      formatted_date += "January";
+      break;
+    case DateTime.february:
+      formatted_date += "February";
+      break;
+    case DateTime.march:
+      formatted_date += "March";
+      break;
+    case DateTime.april:
+      formatted_date += "April";
+      break;
+    case DateTime.may:
+      formatted_date += "May";
+      break;
+    case DateTime.june:
+      formatted_date += "June";
+      break;
+    case DateTime.july:
+      formatted_date += "July";
+      break;
+    case DateTime.august:
+      formatted_date += "August";
+      break;
+    case DateTime.september:
+      formatted_date += "September";
+      break;
+    case DateTime.october:
+      formatted_date += "October";
+      break;
+    case DateTime.november:
+      formatted_date += "November";
+      break;
+    case DateTime.december:
+      formatted_date += "December";
+      break;
+  }
+
+  formatted_date += " ${time_.day}, ${time_.year}";
+  return formatted_date;
 }

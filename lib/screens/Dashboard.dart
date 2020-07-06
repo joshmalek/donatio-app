@@ -1,48 +1,152 @@
+import 'dart:convert';
+
 import 'package:donatio_app/components/Navbar.dart';
+import 'package:donatio_app/models/API.dart';
+import 'package:donatio_app/src/Auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'dart:math';
 
 import '../src/ThemePalette.dart';
 import '../src/Icomoon.dart';
 import '../components/ParallelButton.dart';
 
-// class DashboardScreen extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//         bottomNavigationBar: BottomNavbar(),
-//         body: SafeArea(
-//             child: Column(children: [
-//           Container(
-//               child: Text("Dashboard: Header Placeholder"),
-//               height: 50,
-//               alignment: Alignment.centerLeft,
-//               color: Colors.orange),
-//           LevelModal(10),
-//           ViewLeaderboard(),
-//           DonatedModal(1205.23, "\$"),
-//           DonatedList()
-//         ])));
-//   }
-// }
+double evaluateExperience(double experience_value) {
+  if (experience_value == 0) return 1;
+  return log((5 * experience_value) + 1);
+}
 
-class DashboardBody extends StatelessWidget {
+int getLevel(double experience) {
+  // get the level of the user based on the experience
+  return evaluateExperience(experience).floor();
+}
+
+double getExperiencePercent(double experience) {
+  double experienceLevel = evaluateExperience(experience);
+  // find the experience for the low and high level.
+  int lowerLevel = getLevel(experience);
+  int higherLevel = lowerLevel + 1;
+
+  // find the experience needed for lowerLevel and the experience
+  // needed for highLevel
+  double base = 2.71828;
+  double lowerLevelExp = (pow(base, lowerLevel) - 1) / 5;
+  double higherLevelExp = (pow(base, higherLevel) - 1) / 5;
+
+  // experience should be between lowerLevelExp and higherLevelExp
+  if (experience >= lowerLevelExp && experience <= higherLevelExp) {
+    double percent_ =
+        (experience - lowerLevelExp) / (higherLevelExp - lowerLevelExp);
+    print("Exp Percent is : ${percent_}");
+    print("lower level: ${lowerLevel}, higher level: ${higherLevel}");
+    print("${lowerLevelExp} < ${experience} < ${higherLevelExp}");
+    return max(0, min(percent_, 1));
+  } else {
+    print("Calculating getExperiencePercent went wrong...");
+    print("lower level: ${lowerLevel}, higher level: ${higherLevel}");
+    print("${lowerLevelExp} < ${experience} < ${higherLevelExp}");
+    return 0;
+  }
+}
+
+int getRaminingExperience(double experience) {
+  double experienceLevel = evaluateExperience(experience);
+  // find the experience for the low and high level.
+  int higherLevel = getLevel(experience) + 1;
+
+  double base = 2.71828;
+  double higherLevelExp = (pow(base, higherLevel) - 1) / 5;
+  return (higherLevelExp - experience).floor();
+}
+
+class DashboardBody extends StatefulWidget {
+  AppAuth authInstance;
+  DashboardBody(this.authInstance) {
+    print("DashboardBody instantiated");
+  }
+
+  @override
+  _DashboardBodyState createState() => _DashboardBodyState(this.authInstance);
+}
+
+class _DashboardBodyState extends State<DashboardBody> {
+  AppAuth authInstance;
+
+  List<dynamic> user_receipts = null;
+
+  _DashboardBodyState(this.authInstance) {
+    user_receipts = null;
+    fetch();
+  }
+
+  void fetch() {
+    // attempt to get the user's receipts
+    Future receiptsFuture = API.getUserWeekReceipts(
+        authInstance.userInfo == null
+            ? "<null>"
+            : authInstance.userInfo["_id"]);
+
+    receiptsFuture.then((res) {
+      print("Receipts responded with status ${res.statusCode}");
+      dynamic response = jsonDecode(res.body);
+      print(response.toString());
+
+      setState(() {
+        user_receipts = response["data"]["weekReceipts"];
+        print(user_receipts.toString());
+      });
+    }).catchError((error) {
+      print("Fetching receipts responded with error");
+      print(error);
+    });
+  }
+
+  double receiptTotal() {
+    // sum up the values in the receipt and return the total
+    // amount.
+    double total = 0;
+    for (int i = 0; i < user_receipts.length; ++i) {
+      if (user_receipts[i].containsKey("amount"))
+        total += user_receipts[i]["amount"];
+    }
+
+    return roundDouble(total, 2);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Column(children: [
-      AppHeader(),
-      LevelModal(10),
+      AppHeader(authInstance),
+      LevelModal(
+          getLevel(authInstance.userInfo.containsKey("experience")
+              ? authInstance.userInfo["experience"]
+              : 0),
+          getExperiencePercent(authInstance.userInfo.containsKey("experience")
+              ? authInstance.userInfo["experience"]
+              : 0),
+          getRaminingExperience(authInstance.userInfo.containsKey("experience")
+              ? authInstance.userInfo["experience"]
+              : 0)),
       ViewLeaderboard(),
-      DonatedModal(1205.23, "\$"),
-      DonatedList()
+      DonatedModal(user_receipts == null ? 0 : receiptTotal(), "\$"),
+      user_receipts == null ? Container() : DonatedList(user_receipts)
     ]));
   }
 }
 
 class AppHeader extends StatelessWidget {
+  AppAuth authInstance;
+
+  AppHeader(this.authInstance);
+
+  String getFullName() {
+    if (authInstance.userInfo == null) return "<undefined>";
+    return "${authInstance.userInfo["firstName"]} ${authInstance.userInfo["lastName"]}";
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -57,7 +161,7 @@ class AppHeader extends StatelessWidget {
                     margin: EdgeInsets.fromLTRB(10, 10, 10, 10))),
             Flexible(
                 flex: 2,
-                child: Text("Billy Jean", style: FontPresets.buttonText)),
+                child: Text(getFullName(), style: FontPresets.buttonText)),
             Flexible(
                 flex: 3,
                 child: Container(
@@ -76,29 +180,18 @@ class AppHeader extends StatelessWidget {
   }
 }
 
-class AnotherBody extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(child: Text("Hope this works!"));
-  }
-}
-
 class DonatedList extends StatelessWidget {
+  List<dynamic> receipts;
+  DonatedList(this.receipts);
   @override
   Widget build(BuildContext context) {
     return Container(
         height: 120,
         child: ListView(
           scrollDirection: Axis.horizontal,
-          children: <Widget>[
-            singleDonation(),
-            singleDonation(),
-            singleDonation(),
-            singleDonation(),
-            singleDonation(),
-            singleDonation(),
-            singleDonation()
-          ],
+          children: receipts.map((e) {
+            return singleDonation(e["amount"], e["date_time"]);
+          }).toList(),
         ),
         margin: EdgeInsets.fromLTRB(0, 20, 0, 0));
   }
@@ -139,7 +232,35 @@ class DonatedModal extends StatelessWidget {
   }
 }
 
-Widget singleDonation() {
+Widget singleDonation(dynamic amount, dynamic date_time) {
+  int timestamp = (int.parse(date_time));
+  DateTime dateTime = DateTime.fromMicrosecondsSinceEpoch(timestamp * 1000);
+
+  String weekday = "";
+  switch (dateTime.weekday) {
+    case DateTime.monday:
+      weekday = "Monday";
+      break;
+    case DateTime.tuesday:
+      weekday = "Tuesday";
+      break;
+    case DateTime.wednesday:
+      weekday = "Wednesday";
+      break;
+    case DateTime.thursday:
+      weekday = "Thursday";
+      break;
+    case DateTime.friday:
+      weekday = "Friday";
+      break;
+    case DateTime.saturday:
+      weekday = "Saturday";
+      break;
+    case DateTime.sunday:
+      weekday = "Sunday";
+      break;
+  }
+
   return Container(
     padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
     margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
@@ -147,10 +268,10 @@ Widget singleDonation() {
     child: Column(
       children: <Widget>[
         Container(
-          child: Text("Monday", style: FontPresets.buttonText),
+          child: Text(weekday, style: FontPresets.buttonText),
           margin: EdgeInsets.fromLTRB(0, 0, 0, 15),
         ),
-        Text("\$1302.12",
+        Text("\$${amount}",
             style: FontPresets.colorTransform(
                 FontPresets.title2, ThemePalette.green2)),
         Text("to Black Lives Matter", style: FontPresets.buttonText)
@@ -160,28 +281,6 @@ Widget singleDonation() {
         color: ThemePalette.black, borderRadius: BorderRadius.circular(3)),
   );
 }
-
-// ListView(
-//           children: <Widget>[
-//             Container(
-//                 width: 100,
-//                 color: Colors.red,
-//                 margin: EdgeInsets.fromLTRB(0, 0, 10, 0)),
-//             Container(
-//                 width: 100,
-//                 color: Colors.blue,
-//                 margin: EdgeInsets.fromLTRB(0, 0, 10, 0)),
-//             Container(
-//                 width: 100,
-//                 color: Colors.cyan,
-//                 margin: EdgeInsets.fromLTRB(0, 0, 10, 0)),
-//             Container(
-//                 width: 100,
-//                 color: Colors.brown,
-//                 margin: EdgeInsets.fromLTRB(0, 0, 10, 0))
-//           ],
-//           scrollDirection: Axis.horizontal,
-//         )
 
 List<Widget> emptyDonationView = [
   Container(
@@ -221,7 +320,11 @@ class ViewLeaderboard extends StatelessWidget {
 
 class LevelModal extends StatelessWidget {
   int _level;
-  LevelModal(this._level);
+  double experiencePercent;
+  int experienceReamining;
+  LevelModal(this._level, this.experiencePercent, this.experienceReamining) {
+    print("Experience Percent: ${this.experiencePercent}");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -243,12 +346,13 @@ class LevelModal extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: FractionallySizedBox(
               heightFactor: 1,
-              widthFactor: 0.4,
+              widthFactor: this.experiencePercent,
               child: Container(color: Colors.black),
             )),
         Container(
           alignment: Alignment.centerLeft,
-          child: Text('20 more experience until you reach level ${_level + 1}!',
+          child: Text(
+              '${experienceReamining} more experience until you reach level ${_level + 1}!',
               style: FontPresets.small),
           margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
         )
@@ -262,4 +366,9 @@ class LevelModal extends StatelessWidget {
       ], color: Colors.white, borderRadius: BorderRadius.circular(5)),
     );
   }
+}
+
+double roundDouble(double value, int places) {
+  double mod = pow(10.0, places);
+  return ((value * mod).round().toDouble() / mod);
 }

@@ -7,9 +7,9 @@
 */
 import 'dart:convert';
 
-import 'package:body_parser/body_parser.dart';
 import 'package:donatio_app/models/API.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AppPermission {
   static const int ENTRY = 0;
@@ -27,6 +27,37 @@ class AppAuth {
   Auth() {
     accessLevel = 0;
     userInfo = null;
+
+    // when this Auth instance is initiated, it should try to get any data
+    // of the user that is stored in the app local sorage. If any is present,
+    // laod the data into the class and mark the user as logged in.
+    AttemptRestoreUserSession();
+  }
+
+  void dispose() {
+    // save the user information into the shared prefs.
+    SaveUserSession();
+  }
+
+  void SaveUserSession() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("USER_SESSION", jsonEncode(userInfo));
+    print("user session successfully set!");
+  }
+
+  void AttemptRestoreUserSession() async {
+    print("Attempting to restore the user's previous session.");
+
+    final prefs = await SharedPreferences.getInstance();
+    final userSession = prefs.getString("USER_SESSION") ?? null;
+
+    // TODO check if the session has expired.
+    // TODO store session exiration information in the userInfo data.
+
+    if (userSession != null) {
+      userInfo = jsonDecode(userSession);
+      accessLevel = AppPermission.ENTRY;
+    }
   }
 
   bool loggedIn() {
@@ -47,7 +78,7 @@ class AppAuth {
         "Current auth values:\n\taccessLevel: ${accessLevel}\n\t${userInfo == null ? "null" : userInfo.toString()}");
 
     String loginQuery =
-        'mutation { login(email: "${email}", password: "${password}") {_id, firstName, lastName} }';
+        'mutation { login(email: "${email}", password: "${password}") {_id, firstName, lastName, experience, medals { name, description, date_awarded, alt_description, asset_key, _id }} }';
     Future loginRequest = API.postQuery(API_URL, loginQuery);
 
     loginRequest.then((res) {
