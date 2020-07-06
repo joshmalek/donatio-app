@@ -30,6 +30,13 @@ class API {
     return API.postQuery(baseUrl, weekReceiptsQuery);
   }
 
+  static Future getLockedMedals(String user_id) {
+    String lockedMedalsQuery = """{userLockedMedals(_id:"${user_id}") {
+    name, description, alt_description, asset_key, date_awarded
+  }}""";
+    return API.postQuery(baseUrl, lockedMedalsQuery);
+  }
+
   static Future getUser(String user_id) {
     String userQuery =
         "{ user(_id: \"${user_id}\") { firstName, lastName, email, experience, medals, total_donated, _id, medals { name, description, alt_description, asset_key, date_awarded } } }";
