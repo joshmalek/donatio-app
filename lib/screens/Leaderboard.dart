@@ -30,7 +30,7 @@ class LeaderboardBody extends StatelessWidget {
         children: <Widget>[
           AppHeader(authInstance),
           LeaderboardHeader(),
-          LeaderboardList()
+          LeaderboardList(authInstance)
         ],
       ),
     );
@@ -38,23 +38,49 @@ class LeaderboardBody extends StatelessWidget {
 }
 
 class LeaderboardList extends StatefulWidget {
+  AppAuth authInstance;
+  LeaderboardList(this.authInstance);
   @override
-  createState() => LeaderboardListState();
+  createState() => LeaderboardListState(authInstance);
 }
 
 class LeaderboardListState extends State {
+  AppAuth authInstance;
   var users = new List<User>();
-  var name = "Felix Kjelberg";
+  String userId = "";
+
+  LeaderboardListState(this.authInstance) {
+    // set the user id from the logged in instance.
+    print("userId: ${this.authInstance.userInfo["_id"]}");
+    this.userId = this.authInstance.userInfo["_id"];
+  }
 
   _getUsers() {
-    API.getUsers().then((response) {
+    API.fetchLeaderboard(0, 0).then((response) {
+      print("LEADERBOARD:");
+      dynamic responseData = jsonDecode(response.body);
+      List<dynamic> leaderboardData = responseData["data"]["leaderboard"];
       setState(() {
-        //print(response.body);
-        //print(json.decode(response.body)["data"]["users"][0]["medals"]);
-        Iterable list = json.decode(response.body)["data"]["users"];
-        users = list.map((model) => User.fromJson(model)).toList();
-        users.sort((a, b) => b.xp.compareTo(a.xp));
+        users = leaderboardData.map((user_data) {
+          User new_user = User(
+              user_data["_id"],
+              "${user_data["firstName"]} ${user_data["lastName"]}",
+              user_data["email"],
+              user_data["experience"] is double
+                  ? user_data["experience"].round()
+                  : user_data["experience"],
+              user_data["total_donated"] * 1.0);
+
+          return new_user;
+        }).toList();
       });
+      // setState(() {
+      //   //print(response.body);
+      //   //print(json.decode(response.body)["data"]["users"][0]["medals"]);
+      //   Iterable list = json.decode(response.body)["data"]["users"];
+      //   users = list.map((model) => User.fromJson(model)).toList();
+      //   users.sort((a, b) => b.xp.compareTo(a.xp));
+      // });
     });
   }
 
@@ -80,7 +106,7 @@ class LeaderboardListState extends State {
                   name: users[index].name,
                   rank: index + 1,
                   points: users[index].xp,
-                  isUser: users[index].name == name ? true : false,
+                  isUser: users[index].id == userId ? true : false,
                 );
               },
             )));

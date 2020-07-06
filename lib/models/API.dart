@@ -17,6 +17,12 @@ class API {
     return API.postQuery(baseUrl, getUsersQuery);
   }
 
+  static Future fetchLeaderboard(int offset, int limit) {
+    String leaderboardQuery =
+        "{ leaderboard(offset:${offset},limit:${limit}){lastName,firstName,_id,email,experience,total_donated} }";
+    return API.postQuery(baseUrl, leaderboardQuery);
+  }
+
   static Future getUserWeekReceipts(String user_id) {
     // get the week reciepts for the user.
     String weekReceiptsQuery =

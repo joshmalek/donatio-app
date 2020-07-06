@@ -77,7 +77,6 @@ class _DashboardBodyState extends State<DashboardBody> {
   List<dynamic> user_receipts = null;
 
   _DashboardBodyState(this.authInstance) {
-    print("DashboardBodyState instantiatd");
     user_receipts = null;
     fetch();
   }

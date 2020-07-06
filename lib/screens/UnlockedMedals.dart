@@ -22,15 +22,7 @@ import 'Dashboard.dart';
 
 class UnlockedMedalsBody extends StatefulWidget {
   AppAuth authInstance;
-  UnlockedMedalsBody(this.authInstance) {
-    print("UnlockedMedalsBodyState initialized:");
-
-    if (authInstance.userInfo.containsKey("medals")) {
-      print(authInstance.userInfo["medals"].toString());
-    } else {
-      print("No medals data found in userInfo");
-    }
-  }
+  UnlockedMedalsBody(this.authInstance);
 
   @override
   _UnlockedMedalsBodyState createState() =>

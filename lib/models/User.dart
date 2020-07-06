@@ -28,4 +28,13 @@ class User {
   Map toJson() {
     return {'id': id, 'name': name, 'email': email, 'xp': xp};
   }
+
+  String toString() {
+    return """User: $name:
+      ID: $id
+      email: $email
+      experience: $xp
+      total donated: $donated
+    """;
+  }
 }
