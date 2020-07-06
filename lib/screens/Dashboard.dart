@@ -191,7 +191,7 @@ class DonatedList extends StatelessWidget {
         child: ListView(
           scrollDirection: Axis.horizontal,
           children: receipts.map((e) {
-            return singleDonation(e["amount"]);
+            return singleDonation(e["amount"], e["date_time"]);
           }).toList(),
         ),
         margin: EdgeInsets.fromLTRB(0, 20, 0, 0));
@@ -233,7 +233,35 @@ class DonatedModal extends StatelessWidget {
   }
 }
 
-Widget singleDonation(dynamic amount) {
+Widget singleDonation(dynamic amount, dynamic date_time) {
+  int timestamp = (int.parse(date_time));
+  DateTime dateTime = DateTime.fromMicrosecondsSinceEpoch(timestamp * 1000);
+
+  String weekday = "";
+  switch (dateTime.weekday) {
+    case DateTime.monday:
+      weekday = "Monday";
+      break;
+    case DateTime.tuesday:
+      weekday = "Tuesday";
+      break;
+    case DateTime.wednesday:
+      weekday = "Wednesday";
+      break;
+    case DateTime.thursday:
+      weekday = "Thursday";
+      break;
+    case DateTime.friday:
+      weekday = "Friday";
+      break;
+    case DateTime.saturday:
+      weekday = "Saturday";
+      break;
+    case DateTime.sunday:
+      weekday = "Sunday";
+      break;
+  }
+
   return Container(
     padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
     margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
@@ -241,7 +269,7 @@ Widget singleDonation(dynamic amount) {
     child: Column(
       children: <Widget>[
         Container(
-          child: Text("Monday", style: FontPresets.buttonText),
+          child: Text(weekday, style: FontPresets.buttonText),
           margin: EdgeInsets.fromLTRB(0, 0, 0, 15),
         ),
         Text("\$${amount}",
