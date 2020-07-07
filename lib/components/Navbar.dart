@@ -96,7 +96,7 @@ class _BottomNavbarState extends State<BottomNavbar>
                                       11)) -
                               10,
                           height: 40,
-                          color: Colors.orange),
+                          color: ThemePalette.black),
                       left: _left),
                   Row(
                     children: <Widget>[
@@ -111,7 +111,11 @@ class _BottomNavbarState extends State<BottomNavbar>
                               },
                               child: Container(
                                   alignment: Alignment.center,
-                                  child: Icon(Icomoon.dashboard, size: 17)))),
+                                  child: Icon(Icomoon.dashboard,
+                                      size: 17,
+                                      color: _pageIndex == 0
+                                          ? Colors.white
+                                          : ThemePalette.black)))),
                       Flexible(
                           flex: 2,
                           child: GestureDetector(
@@ -123,7 +127,11 @@ class _BottomNavbarState extends State<BottomNavbar>
                               },
                               child: Container(
                                   alignment: Alignment.center,
-                                  child: Icon(Icomoon.hexagon2, size: 22)))),
+                                  child: Icon(Icomoon.hexagon2,
+                                      size: 22,
+                                      color: _pageIndex == 1
+                                          ? Colors.white
+                                          : ThemePalette.black)))),
                       Flexible(
                           flex: 3,
                           child: Container(
@@ -144,7 +152,11 @@ class _BottomNavbarState extends State<BottomNavbar>
                               },
                               child: Container(
                                   alignment: Alignment.center,
-                                  child: Icon(Icomoon.trophy, size: 20)))),
+                                  child: Icon(Icomoon.trophy,
+                                      size: 20,
+                                      color: _pageIndex == 2
+                                          ? Colors.white
+                                          : ThemePalette.black)))),
                       Flexible(
                           flex: 2,
                           child: GestureDetector(
@@ -156,7 +168,11 @@ class _BottomNavbarState extends State<BottomNavbar>
                               },
                               child: Container(
                                   alignment: Alignment.center,
-                                  child: Icon(Icomoon.coin, size: 18))))
+                                  child: Icon(Icomoon.coin,
+                                      size: 18,
+                                      color: _pageIndex == 3
+                                          ? Colors.white
+                                          : ThemePalette.black))))
                     ],
                   )
                 ],
@@ -169,15 +185,22 @@ class _BottomNavbarState extends State<BottomNavbar>
                     blurRadius: 8)
               ], color: Colors.white, borderRadius: BorderRadius.circular(5)),
             )),
-        body: TabBarView(
-          children: <Widget>[
-            DashboardBody(authInstance),
-            UnlockedMedalsBody(authInstance),
-            LeaderboardBody(authInstance),
-            DonateBody(authInstance)
-          ],
-          controller: _tabController,
-          physics: NeverScrollableScrollPhysics(),
-        ));
+        body: Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Color(0xff93A0C8), Color(0xffF993AC)],
+            )),
+            child: TabBarView(
+              children: <Widget>[
+                DashboardBody(authInstance),
+                UnlockedMedalsBody(authInstance),
+                LeaderboardBody(authInstance),
+                DonateBody(authInstance)
+              ],
+              controller: _tabController,
+              physics: NeverScrollableScrollPhysics(),
+            )));
   }
 }

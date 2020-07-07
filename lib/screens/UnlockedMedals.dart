@@ -1,7 +1,12 @@
+import 'dart:convert';
+import 'dart:ffi';
+
 import 'package:donatio_app/components/Navbar.dart';
 import 'package:donatio_app/components/ParallelButton.dart';
+import 'package:donatio_app/models/API.dart';
 import 'package:donatio_app/src/Auth.dart';
 import 'package:donatio_app/src/Icomoon.dart';
+import 'package:donatio_app/src/MedalAsset.dart';
 import 'package:donatio_app/src/ThemePalette.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -32,10 +37,29 @@ class UnlockedMedalsBody extends StatefulWidget {
 class _UnlockedMedalsBodyState extends State<UnlockedMedalsBody> {
   AppAuth authInstance;
   List<dynamic> medalsList = null;
+  List<dynamic> lockedMedalsList = null;
+  bool showingLockedMedals = false;
   _UnlockedMedalsBodyState(this.authInstance) {
     if (authInstance.userInfo.containsKey("medals")) {
       medalsList = authInstance.userInfo["medals"];
+
+      API.getLockedMedals(authInstance.userInfo["_id"]).then((response) {
+        print("Finished fetching locked medals.");
+        print(response.body);
+        Map<String, dynamic> jsonRes = jsonDecode(response.body);
+        lockedMedalsList = jsonRes["data"]["userLockedMedals"];
+
+        // temporarily set the locked medals list the same as medals list
+        // lockedMedalsList = medalsList;
+      });
     }
+  }
+
+  int getMedalCount() {
+    if (showingLockedMedals && medalsList != null) return medalsList.length;
+    if (!showingLockedMedals && lockedMedalsList != null)
+      return lockedMedalsList.length;
+    return 0;
   }
 
   @override
@@ -44,8 +68,54 @@ class _UnlockedMedalsBodyState extends State<UnlockedMedalsBody> {
       child: Column(
         children: [
           AppHeader(authInstance),
-          MedalsHeader(medalsList),
-          MedalList(medalsList)
+          MedalsHeader(medalsList, lockedMedalsList, showingLockedMedals),
+          showingLockedMedals
+              ? LockedMedalList(lockedMedalsList)
+              : MedalList(medalsList),
+          Flexible(
+              flex: 1,
+              child: Container(
+                  margin: EdgeInsets.fromLTRB(50, 0, 50, 0),
+                  child: Stack(
+                    children: <Widget>[
+                      Positioned(
+                        left: 10,
+                        bottom: 10,
+                        child: Container(
+                          child: SvgPicture.asset(
+                            'assets/vault.svg',
+                            semanticsLabel: "Vault Graphic",
+                          ),
+                          width: 150,
+                          height: 150,
+                        ),
+                      ),
+                      Positioned(
+                          bottom: 10,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                              alignment: Alignment.center,
+                              height: 60,
+                              child: Column(
+                                children: <Widget>[
+                                  Container(
+                                      child: Text(
+                                          "${getMedalCount()} ${showingLockedMedals ? "unlocked" : "locked"} medals"),
+                                      alignment: Alignment.center),
+                                  Container(
+                                      child: ParallelButton.withAction(
+                                          "View ${showingLockedMedals ? "Unlocked" : "Locked"} medals",
+                                          260, () {
+                                    setState(() {
+                                      showingLockedMedals =
+                                          !showingLockedMedals;
+                                    });
+                                  }))
+                                ],
+                              )))
+                    ],
+                  )))
         ],
       ),
     );
@@ -79,9 +149,21 @@ class _MedalListState extends State<MedalList> {
             child: Container(
               child: ListView(
                 children: medalsList == null
-                    ? []
+                    ? [
+                        Container(
+                          alignment: Alignment.center,
+                          height: 250,
+                          child: Text(
+                            "You have no medals yet\nDonate to unlock your first medal!",
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                      ]
                     : medalsList.map((medal_) {
                         dynamic award_date = medal_['date_awarded'];
+                        // print("Date Awarded: ${award_date}");
+                        // print(
+                        //     "Date Awarded is String ? ${award_date is String}");
                         int timestamp = int.parse(award_date);
                         DateTime time_ = DateTime.fromMicrosecondsSinceEpoch(
                             timestamp * 1000);
@@ -122,7 +204,11 @@ class _MedalListState extends State<MedalList> {
                                           padding:
                                               EdgeInsets.fromLTRB(0, 10, 0, 0),
                                           alignment: Alignment.topCenter,
-                                          child: Icon(Icomoon.hexagon2))),
+                                          child: Container(
+                                              alignment: Alignment.topCenter,
+                                              height: 26,
+                                              child: MedalAsset.medalSvg(
+                                                  medal_['asset_key'])))),
                                   Flexible(
                                       flex: 5,
                                       child: Column(
@@ -178,42 +264,155 @@ class _MedalListState extends State<MedalList> {
               ),
               margin: EdgeInsets.fromLTRB(40, 20, 40, 0),
             )),
+      ],
+    ));
+  }
+}
+
+class LockedMedalList extends StatefulWidget {
+  List<dynamic> lockedMedalsList;
+  LockedMedalList(this.lockedMedalsList);
+  _LockedMedalListState createState() =>
+      _LockedMedalListState(lockedMedalsList);
+}
+
+class _LockedMedalListState extends State<LockedMedalList> {
+  List<dynamic> lockedMedalsList;
+  _LockedMedalListState(this.lockedMedalsList);
+  String _focusIndex = "";
+
+  void _updateState(String newFocusIndex) {
+    setState(() {
+      _focusIndex = newFocusIndex;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+        child: Column(
+      children: <Widget>[
         Flexible(
-            flex: 1,
+            flex: 3,
             child: Container(
-                margin: EdgeInsets.fromLTRB(50, 0, 50, 0),
-                child: Stack(
-                  children: <Widget>[
-                    Positioned(
-                      left: 10,
-                      child: Container(
-                        child: SvgPicture.asset(
-                          'assets/vault.svg',
-                          semanticsLabel: "Vault Graphic",
-                        ),
-                        width: 150,
-                        height: 150,
-                      ),
-                    ),
-                    Positioned(
-                        bottom: 10,
-                        left: 0,
-                        right: 0,
-                        child: Container(
-                            alignment: Alignment.center,
-                            height: 60,
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                    child: Text("38 locked medals"),
-                                    alignment: Alignment.center),
-                                Container(
-                                    child: ParallelButton(
-                                        "View Locked medals", 260))
-                              ],
-                            )))
-                  ],
-                )))
+              child: ListView(
+                children: lockedMedalsList == null ||
+                        lockedMedalsList.length == 0
+                    ? [
+                        Container(
+                          alignment: Alignment.center,
+                          height: 250,
+                          child: Text(
+                            "You have unlocked all the medals!\nStay tuned for more.",
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                      ]
+                    : lockedMedalsList.map((medal_) {
+                        dynamic award_date = medal_['date_awarded'];
+                        // print("Date Awarded: ${award_date}");
+                        // print(
+                        //     "Date Awarded is String ? ${award_date is String}");
+                        int timestamp = int.parse(award_date);
+                        DateTime time_ = DateTime.fromMicrosecondsSinceEpoch(
+                            timestamp * 1000);
+                        String formatted_date = getDateString(time_);
+
+                        return GestureDetector(
+                          onTap: () {
+                            print(medal_);
+                            _updateState(medal_['_id']);
+                          },
+                          child: AnimatedContainer(
+                              duration: Duration(milliseconds: 500),
+                              curve: Curves.fastOutSlowIn,
+                              height: _focusIndex == medal_['_id'] ? 120 : 45,
+                              alignment: Alignment.topLeft,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(5)),
+                              margin: EdgeInsets.fromLTRB(
+                                  _focusIndex == medal_['_id'] ? 0 : 10,
+                                  0,
+                                  _focusIndex == medal_['_id'] ? 0 : 10,
+                                  10),
+                              child: Row(
+                                children: <Widget>[
+                                  Flexible(
+                                      flex: 1,
+                                      child: Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(5),
+                                                  bottomLeft:
+                                                      Radius.circular(5)),
+                                              color:
+                                                  _focusIndex == medal_['_id']
+                                                      ? ThemePalette.green3
+                                                      : Colors.white),
+                                          padding:
+                                              EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                          alignment: Alignment.topCenter,
+                                          child: Container(
+                                              alignment: Alignment.topCenter,
+                                              height: 26,
+                                              child: MedalAsset.medalSvg(
+                                                  medal_['asset_key'])))),
+                                  Flexible(
+                                      flex: 5,
+                                      child: Column(
+                                        children: <Widget>[
+                                          Flexible(
+                                              flex: 1,
+                                              child: Container(
+                                                  child: Row(
+                                                children: <Widget>[
+                                                  Flexible(
+                                                      flex: 2,
+                                                      child: Container(
+                                                        margin:
+                                                            EdgeInsets.fromLTRB(
+                                                                15, 0, 0, 0),
+                                                        child: Text(
+                                                            medal_["name"]),
+                                                        alignment: Alignment
+                                                            .centerLeft,
+                                                      )),
+                                                  Flexible(
+                                                      flex: 1,
+                                                      child: Container(
+                                                          margin:
+                                                              EdgeInsets
+                                                                  .fromLTRB(0,
+                                                                      0, 20, 0),
+                                                          child: Text(
+                                                              formatted_date),
+                                                          alignment:
+                                                              Alignment.center))
+                                                ],
+                                              ))),
+                                          Flexible(
+                                              flex: _focusIndex == medal_['_id']
+                                                  ? 3
+                                                  : 0,
+                                              child: Container(
+                                                  alignment: Alignment.topLeft,
+                                                  padding: EdgeInsets.fromLTRB(
+                                                      15, 0, 0, 0),
+                                                  child: _focusIndex ==
+                                                          medal_['_id']
+                                                      ? Text(
+                                                          "You ${medal_['alt_description']}")
+                                                      : null))
+                                        ],
+                                      ))
+                                ],
+                              )),
+                        );
+                      }).toList(),
+              ),
+              margin: EdgeInsets.fromLTRB(40, 20, 40, 0),
+            )),
       ],
     ));
   }
@@ -221,7 +420,19 @@ class _MedalListState extends State<MedalList> {
 
 class MedalsHeader extends StatelessWidget {
   List<dynamic> medalsList = null;
-  MedalsHeader(this.medalsList);
+  List<dynamic> lockedMedalsList = null;
+  bool showLockedMedalsList;
+  MedalsHeader(
+      this.medalsList, this.lockedMedalsList, this.showLockedMedalsList);
+
+  String medalCount() {
+    if (showLockedMedalsList && lockedMedalsList != null)
+      return "You have ${lockedMedalsList.length} medals to unlock.";
+    if (!showLockedMedalsList && medalsList != null)
+      return "You unlocked ${medalsList.length} medals.";
+    return "<empty>";
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -230,13 +441,13 @@ class MedalsHeader extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Container(
-              child: Text("Unlocked Medals", style: FontPresets.title1),
+              child: Text(
+                  "${showLockedMedalsList ? "Locked" : "Unlocked"} Medals",
+                  style: FontPresets.title1),
               alignment: Alignment.centerLeft,
             ),
             Container(
-              child: Text(
-                  "You unlocked ${medalsList == null ? 0 : medalsList.length} medals",
-                  style: FontPresets.label),
+              child: Text(medalCount(), style: FontPresets.label),
               alignment: Alignment.centerLeft,
             )
           ],

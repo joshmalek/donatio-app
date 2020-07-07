@@ -181,12 +181,15 @@ class AppHeader extends StatelessWidget {
 }
 
 class DonatedList extends StatelessWidget {
-  List<dynamic> receipts;
-  DonatedList(this.receipts);
+  List<dynamic> receipts = null;
+  DonatedList(this.receipts) {
+    print("DonatedList loaded");
+    print("Loaded ${receipts == null ? '<null>' : receipts.length} receipts.");
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 120,
+        height: receipts == null || receipts.length == 0 ? 0 : 120,
         child: ListView(
           scrollDirection: Axis.horizontal,
           children: receipts.map((e) {
@@ -206,7 +209,7 @@ class DonatedModal extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         margin: EdgeInsets.fromLTRB(50, 10, 50, 0),
-        padding: EdgeInsets.fromLTRB(20, 18, 20, 18),
+        padding: EdgeInsets.fromLTRB(20, 18, 20, _amount == 0 ? 0 : 18),
         alignment: Alignment.topLeft,
         child: Column(
           children: <Widget>[
@@ -220,7 +223,7 @@ class DonatedModal extends StatelessWidget {
                 child: Text("Donated this week", style: FontPresets.title1),
                 alignment: Alignment.centerLeft,
                 margin: EdgeInsets.fromLTRB(0, 5, 0, 15)),
-          ]..addAll(_amount == 0 ? emptyDonationView : []),
+          ]..addAll(_amount == 0 ? emptyDonationView() : []),
         ),
         decoration: BoxDecoration(boxShadow: [
           new BoxShadow(
@@ -282,17 +285,19 @@ Widget singleDonation(dynamic amount, dynamic date_time) {
   );
 }
 
-List<Widget> emptyDonationView = [
-  Container(
-    child:
-        Text("Want to start donating to charities?", style: FontPresets.small),
-    alignment: Alignment.centerLeft,
-  ),
-  Container(
-    child: ParallelButton("Donate", 150),
-    margin: EdgeInsets.fromLTRB(0, 40, 0, 40),
-  )
-];
+List<Widget> emptyDonationView() {
+  return [
+    Container(
+      child: Text("Want to start donating to charities?",
+          style: FontPresets.small),
+      alignment: Alignment.centerLeft,
+    ),
+    Container(
+      child: ParallelButton("Donate", 150),
+      margin: EdgeInsets.fromLTRB(0, 25, 0, 25),
+    )
+  ];
+}
 
 class ViewLeaderboard extends StatelessWidget {
   @override

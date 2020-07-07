@@ -21,13 +21,19 @@ class ParallelButton extends StatelessWidget {
         onTap: () {
           if (_hasAction) _onpress();
         },
-        child: Container(
-            height: 30,
-            alignment: Alignment.center,
-            width: _width < 100 ? 100 : _width,
-            child: Text(this._buttonValue, style: FontPresets.buttonText),
-            decoration: BoxDecoration(
-                color: ThemePalette.black,
-                borderRadius: BorderRadius.circular(3))));
+        child: Transform(
+          transform: Matrix4.skewX(100),
+          child: Container(
+              height: 30,
+              alignment: Alignment.center,
+              width: _width < 100 ? 100 : _width,
+              child: Transform(
+                transform: Matrix4.skewX(-100),
+                child: Text(this._buttonValue, style: FontPresets.buttonText),
+              ),
+              decoration: BoxDecoration(
+                  color: ThemePalette.black,
+                  borderRadius: BorderRadius.circular(3))),
+        ));
   }
 }
