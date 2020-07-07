@@ -185,15 +185,22 @@ class _BottomNavbarState extends State<BottomNavbar>
                     blurRadius: 8)
               ], color: Colors.white, borderRadius: BorderRadius.circular(5)),
             )),
-        body: TabBarView(
-          children: <Widget>[
-            DashboardBody(authInstance),
-            UnlockedMedalsBody(authInstance),
-            LeaderboardBody(authInstance),
-            DonateBody(authInstance)
-          ],
-          controller: _tabController,
-          physics: NeverScrollableScrollPhysics(),
-        ));
+        body: Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Color(0xff93A0C8), Color(0xffF993AC)],
+            )),
+            child: TabBarView(
+              children: <Widget>[
+                DashboardBody(authInstance),
+                UnlockedMedalsBody(authInstance),
+                LeaderboardBody(authInstance),
+                DonateBody(authInstance)
+              ],
+              controller: _tabController,
+              physics: NeverScrollableScrollPhysics(),
+            )));
   }
 }

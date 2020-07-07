@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'DonatIO',
       theme: ThemeData(
-          scaffoldBackgroundColor: Color(0xffC39ABB),
+          scaffoldBackgroundColor: Color(0xffF993AC),
           textTheme: TextTheme(
               headline1: TextStyle(
                   fontSize: 30.0,
