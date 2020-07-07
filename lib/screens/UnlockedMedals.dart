@@ -6,6 +6,7 @@ import 'package:donatio_app/components/ParallelButton.dart';
 import 'package:donatio_app/models/API.dart';
 import 'package:donatio_app/src/Auth.dart';
 import 'package:donatio_app/src/Icomoon.dart';
+import 'package:donatio_app/src/MedalAsset.dart';
 import 'package:donatio_app/src/ThemePalette.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -203,7 +204,11 @@ class _MedalListState extends State<MedalList> {
                                           padding:
                                               EdgeInsets.fromLTRB(0, 10, 0, 0),
                                           alignment: Alignment.topCenter,
-                                          child: Icon(Icomoon.hexagon2))),
+                                          child: Container(
+                                              alignment: Alignment.topCenter,
+                                              height: 26,
+                                              child: MedalAsset.medalSvg(
+                                                  medal_['asset_key'])))),
                                   Flexible(
                                       flex: 5,
                                       child: Column(
@@ -348,7 +353,11 @@ class _LockedMedalListState extends State<LockedMedalList> {
                                           padding:
                                               EdgeInsets.fromLTRB(0, 10, 0, 0),
                                           alignment: Alignment.topCenter,
-                                          child: Icon(Icomoon.hexagon2))),
+                                          child: Container(
+                                              alignment: Alignment.topCenter,
+                                              height: 26,
+                                              child: MedalAsset.medalSvg(
+                                                  medal_['asset_key'])))),
                                   Flexible(
                                       flex: 5,
                                       child: Column(
