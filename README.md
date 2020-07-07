@@ -1,7 +1,7 @@
 # Donatio App
 ![AWS Status](https://img.shields.io/badge/AWS%20Server%20Status-Online-brightgreen)
 ![ISC](https://img.shields.io/badge/license-ISC-blue.svg) 
-[![GitHub](https://img.shields.io/badge/repo-github-green.svg)](https://github.com/joshmalek/donatio)
+[![GitHub](https://img.shields.io/badge/repo-github-green.svg)](https://github.com/joshmalek/donatio-app)
 ![Code Style](https://camo.githubusercontent.com/c83b8df34339bd302b7fd3fbb631f99ba25f87f8/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f636f64655f7374796c652d70726574746965722d6666363962342e737667)
 [![Twitter handle][]][Twitter badge]
 
