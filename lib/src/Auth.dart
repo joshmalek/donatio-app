@@ -22,7 +22,7 @@ class AppAuth {
   int accessLevel = 0;
   Map<String, dynamic> userInfo = null;
 
-  final String API_URL = "http://3.21.56.172:4000/graphql";
+  final String API_URL = "https://3.21.56.172/graphql";
 
   Auth() {
     accessLevel = 0;
