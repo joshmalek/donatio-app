@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-const baseUrl = 'https://3.21.56.172/graphql?query=';
+const baseUrl = 'https://3.130.4.139/graphql?query=';
 
 class API {
   static Future postQuery(String apiUri, String query) {
