@@ -19,10 +19,6 @@ An AWSRaiseUp project by [Abdul-Muiz Yusuff](https://github.com/sacrael) & [Josh
 * User profile page that tracks experience earned, and the medals/achievements that have been unlocked.
 * Area that shows what medals are yet to be unlocked for a user, and what needs to be accomplished to earn them.
 
-## Documentation 
-This repo consists of the mobile front of our product.  
-
-
 ## Installation
 1. (Optional) If the AWS server is not currently running, download and follow the install instructions for the backend which can be found [here](https://github.com/joshmalek/donatio/blob/master/README.md).
 2.  Download the .apk file and load into into your Android device or your Android emulator.   A guide for doing this can be found [here](https://www.androidauthority.com/how-to-install-apks-31494/).
